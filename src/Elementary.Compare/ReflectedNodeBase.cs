@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 
-namespace Elementary.Hierarchy.Reflection
+namespace Elementary.Compare
 {
     public abstract class ReflectedNodeBase
     {

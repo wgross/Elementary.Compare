@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
-namespace Elementary.Hierarchy.Reflection.Test
+namespace Elementary.Compare.Test
 {
     public class FlattenObjectTest
     {

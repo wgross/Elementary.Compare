@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 
-namespace Elementary.Hierarchy.Reflection
+namespace Elementary.Compare
 {
     public abstract class ReflectedPropertyNodeBase : ReflectedNodeBase
     {

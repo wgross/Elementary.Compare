@@ -1,6 +1,6 @@
 ﻿using Xunit;
 
-namespace Elementary.Hierarchy.Reflection.Test
+namespace Elementary.Compare.Test
 {
     public class DeepEqualsTest
     {

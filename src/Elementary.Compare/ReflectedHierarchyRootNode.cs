@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Elementary.Hierarchy.Reflection
+namespace Elementary.Compare
 {
     public class ReflectedHierarchyRootNode : ReflectedHierarchyObjectNodeBase, IReflectedHierarchyNode
     {

@@ -1,4 +1,4 @@
-﻿namespace Elementary.Hierarchy.Reflection
+﻿namespace Elementary.Compare
 {
     public class ReflectedHierarchy
     {

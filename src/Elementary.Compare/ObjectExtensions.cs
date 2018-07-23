@@ -1,10 +1,11 @@
-﻿using Elementary.Hierarchy.Generic;
+﻿using Elementary.Hierarchy;
+using Elementary.Hierarchy.Generic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace Elementary.Hierarchy.Reflection
+namespace Elementary.Compare
 {
     public static class ObjectExtensions
     {

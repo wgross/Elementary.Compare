@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Elementary.Hierarchy.Reflection
+namespace Elementary.Compare
 {
     /// <summary>
     /// An inner node of the refleceted hierrachy refers always to an instance and a property info.

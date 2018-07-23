@@ -1,10 +1,12 @@
-﻿using Moq;
+﻿using Elementary.Hierarchy;
+using Moq;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Xunit;
 
-namespace Elementary.Hierarchy.Reflection.Test
+
+namespace Elementary.Compare.Test
 {
     public class ReflectedHierarchyNodeTest
     {

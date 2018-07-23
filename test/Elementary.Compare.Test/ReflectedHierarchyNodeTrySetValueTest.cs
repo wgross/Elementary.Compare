@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Elementary.Hierarchy;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Xunit;
 
-namespace Elementary.Hierarchy.Reflection.Test
+namespace Elementary.Compare.Test
 {
     public class ReflectedHierarchyNodeTrySetValueTest
     {

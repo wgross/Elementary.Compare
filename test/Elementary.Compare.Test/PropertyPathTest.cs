@@ -1,6 +1,7 @@
-﻿using Xunit;
+﻿using Elementary.Hierarchy;
+using Xunit;
 
-namespace Elementary.Hierarchy.Reflection.Test
+namespace Elementary.Compare.Test
 {
     public class PropertyPathTest
     {
