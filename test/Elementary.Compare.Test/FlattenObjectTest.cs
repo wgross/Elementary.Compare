@@ -20,7 +20,7 @@ namespace Elementary.Compare.Test
 
             // ACT
 
-            var result = new Dictionary<string,object>(obj.Flatten());
+            var result = new Dictionary<string, object>(obj.Flatten());
 
             // ASSERT
 
