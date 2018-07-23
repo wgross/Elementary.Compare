@@ -121,10 +121,10 @@ namespace Elementary.Compare.Test
             var result = hierarchyNode.Children().ToArray();
 
             // ASSERT
-            // string has additional properties which qualify sub nodes.
+            // string is a leaf by definition. It's properzies arr ignored
 
             Assert.Single(result);
-            Assert.True(result.Single().HasChildNodes);
+            Assert.False(result.Single().HasChildNodes);
             Assert.Equal("property", result.Single().Id);
         }
 
@@ -183,24 +183,6 @@ namespace Elementary.Compare.Test
 
             Assert.Equal(2, result.Length);
             Assert.Equal(new[] { "0", "1" }, result.Select(p => p.Id).ToArray());
-        }
-
-        [Fact]
-        public void Skip_properties_with_indexer()
-        {
-            // ARRANGE
-
-            var hierarchyNode = ReflectedHierarchyFactory.Create("test");
-
-            // ACT
-
-            var result = hierarchyNode.ChildNodes.ToArray();
-
-            // ASSERT
-            // 'Chars' property is skipped, Length is contained
-
-            Assert.Single(result);
-            Assert.Equal("Length", result.Single().Id);
         }
 
         [Fact]
@@ -741,7 +723,7 @@ namespace Elementary.Compare.Test
             // ASSERT
             // retuirns property "a" and a's value property Length. Chars is ignored.
 
-            Assert.Equal(2, result.Length);
+            Assert.Single(result);
         }
 
         [Fact]
@@ -761,7 +743,7 @@ namespace Elementary.Compare.Test
 
             // ASSERT
 
-            Assert.Equal(3, result.Count());
+            Assert.Equal(2, result.Count());
         }
 
         #endregion Taverse the hierachy

@@ -11,7 +11,7 @@ namespace Elementary.Compare.Test
         {
             // ARRANGE
 
-            var factory = new FlattedObjectHierarchyNodeFactory();
+            var factory = new ReflectedHierarchyNodeFactory();
             var str = "string";
 
             // ACT
@@ -28,7 +28,7 @@ namespace Elementary.Compare.Test
         {
             // ARRANGE
 
-            var factory = new FlattedObjectHierarchyNodeFactory();
+            var factory = new ReflectedHierarchyNodeFactory();
             var date = DateTime.Now;
 
             // ACT

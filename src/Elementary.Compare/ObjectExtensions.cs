@@ -12,7 +12,7 @@ namespace Elementary.Compare
     {
         public static IEnumerable<KeyValuePair<string, object>> Flatten(this object root)
         {
-            var h = ReflectedHierarchy.ReflectedHierarchyFactory.Create(root, new FlattedObjectHierarchyNodeFactory());
+            var h = ReflectedHierarchy.ReflectedHierarchyFactory.Create(root, new ReflectedHierarchyNodeFactory());
             var flatted_h = new Dictionary<string, object>();
             foreach (var (node, path) in h.DescendantsWithPath(getChildren: n => n.ChildNodes, depthFirst: true, maxDepth: null))
             {

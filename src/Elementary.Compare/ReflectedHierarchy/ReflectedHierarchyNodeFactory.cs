@@ -8,6 +8,14 @@ namespace Elementary.Compare.ReflectedHierarchy
     {
         public virtual IReflectedHierarchyNode Create(object instance, PropertyInfo property)
         {
+            var instanceType = instance.GetType();
+
+            if (typeof(string).Equals(instanceType))
+                return null; // ignore strings properties
+
+            if (instanceType.IsValueType)
+                return null;
+
             if (property.GetIndexParameters().Any())
                 return null; // exclude indexers
 
