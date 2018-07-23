@@ -19,9 +19,6 @@ namespace Elementary.Compare.ReflectedHierarchy
             if (property.GetIndexParameters().Any())
                 return null; // exclude indexers
 
-            if (property.PropertyType.IsArray)
-                return new ReflectedHierarchyArrayNode(instance, property, this);
-
             if (property.PropertyType != typeof(string)) // string is also enumerable but is treated like a 'value type'
                 if (property.PropertyType.GetInterface(typeof(IEnumerable).Name) != null)
                     return new ReflectedHierarchyEnumerableNode(instance, property, this);

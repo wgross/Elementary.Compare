@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace Elementary.Compare.ReflectedHierarchy
 {
-    internal class ReflectedHierarchyEnumerableNode : ReflectedPropertyNodeBase, IReflectedHierarchyNode
+    public class ReflectedHierarchyEnumerableNode : ReflectedPropertyNodeBase, IReflectedHierarchyNode
     {
         public ReflectedHierarchyEnumerableNode(object instance, PropertyInfo propertyInfo, ReflectedHierarchyNodeFactory nodeFactory)
             : base(instance, propertyInfo, nodeFactory)
