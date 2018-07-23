@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Elementary.Compare
+﻿namespace Elementary.Compare
 {
     public sealed class ReflectedHierarchyObjectNode : ReflectedHierarchyObjectNodeBase, IReflectedHierarchyNode
     {
@@ -14,17 +12,6 @@ namespace Elementary.Compare
         #region IReflectedHierarchyNode members
 
         public string Id { get; }
-
-        public bool TrySetValue<T>(T value)
-        {
-            this.instance = value;
-            return true;
-        }
-
-        public bool TrySetValue<T>(Func<T, T> generateNewValue)
-        {
-            throw new NotImplementedException();
-        }
 
         #endregion IReflectedHierarchyNode members
     }

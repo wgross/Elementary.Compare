@@ -46,23 +46,5 @@ namespace Elementary.Compare
         }
 
         #endregion IHasIdentifiableChildNodes
-
-        #region IReflectedHierarchyNode members
-
-        public bool TrySetValue<T>(T value)
-        {
-            if (this.IsNotAssignable<T>())
-                return false;
-
-            this.propertyInfo.SetValue(this.instance, value);
-            return true;
-        }
-
-        public bool TrySetValue<T>(Func<T, T> generateNewValue)
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion IReflectedHierarchyNode members
     }
 }

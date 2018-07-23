@@ -1,5 +1,4 @@
 ﻿using Elementary.Hierarchy;
-using System;
 
 namespace Elementary.Compare
 {
@@ -8,9 +7,5 @@ namespace Elementary.Compare
         string Id { get; }
 
         (bool, T) TryGetValue<T>();
-
-        bool TrySetValue<T>(T value);
-
-        bool TrySetValue<T>(Func<T, T> generateNewValue);
     }
 }
