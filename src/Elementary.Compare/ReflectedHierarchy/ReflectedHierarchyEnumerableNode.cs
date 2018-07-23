@@ -5,7 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 
-namespace Elementary.Compare
+namespace Elementary.Compare.ReflectedHierarchy
 {
     internal class ReflectedHierarchyEnumerableNode : ReflectedPropertyNodeBase, IReflectedHierarchyNode
     {

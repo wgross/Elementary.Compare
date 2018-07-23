@@ -1,10 +1,10 @@
-﻿using Elementary.Hierarchy;
+﻿using Elementary.Compare.ReflectedHierarchy;
+using Elementary.Hierarchy;
 using Moq;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Xunit;
-
 
 namespace Elementary.Compare.Test
 {
@@ -23,7 +23,7 @@ namespace Elementary.Compare.Test
         {
             // ACT
 
-            var hierarchyNode = ReflectedHierarchy.Create(1);
+            var hierarchyNode = ReflectedHierarchyFactory.Create(1);
 
             // ASSERT
 
@@ -37,7 +37,7 @@ namespace Elementary.Compare.Test
         {
             // ACT
 
-            var hierarchyNode = ReflectedHierarchy.Create(new { });
+            var hierarchyNode = ReflectedHierarchyFactory.Create(new { });
 
             // ASSERT
 
@@ -50,7 +50,7 @@ namespace Elementary.Compare.Test
         {
             // ACT
 
-            var hierarchyNode = ReflectedHierarchy.Create(new int[0]);
+            var hierarchyNode = ReflectedHierarchyFactory.Create(new int[0]);
 
             // ASSERT
             //the Length property is the single chidl of an array
@@ -74,7 +74,7 @@ namespace Elementary.Compare.Test
                 .Setup(f => f.Create(nodeValue, It.Is<PropertyInfo>(pi => pi.Name.Equals("a"))))
                 .Returns((IReflectedHierarchyNode)null);
 
-            var hierarchyNode = ReflectedHierarchy.Create(nodeValue, factory.Object);
+            var hierarchyNode = ReflectedHierarchyFactory.Create(nodeValue, factory.Object);
 
             // ACT
 
@@ -95,7 +95,7 @@ namespace Elementary.Compare.Test
             // ARRANGE
 
             var obj = new { property = (int)1 };
-            var hierarchyNode = ReflectedHierarchy.Create(obj);
+            var hierarchyNode = ReflectedHierarchyFactory.Create(obj);
 
             // ACT
 
@@ -114,7 +114,7 @@ namespace Elementary.Compare.Test
             // ARRANGE
 
             var obj = new { property = "1" };
-            var hierarchyNode = ReflectedHierarchy.Create(obj);
+            var hierarchyNode = ReflectedHierarchyFactory.Create(obj);
 
             // ACT
 
@@ -134,7 +134,7 @@ namespace Elementary.Compare.Test
             // ARRANGE
 
             var obj = new { property = new[] { 1, 2 } };
-            var hierarchyNode = ReflectedHierarchy.Create(obj);
+            var hierarchyNode = ReflectedHierarchyFactory.Create(obj);
 
             // ACT
 
@@ -154,7 +154,7 @@ namespace Elementary.Compare.Test
             // ARRANGE
 
             var obj = new { property = new[] { 1, 2 } };
-            var hierarchyNode = ReflectedHierarchy.Create(obj);
+            var hierarchyNode = ReflectedHierarchyFactory.Create(obj);
 
             // ACT
 
@@ -172,7 +172,7 @@ namespace Elementary.Compare.Test
             // ARRANGE
 
             var obj = new { property = new List<int> { 1, 2 } };
-            var hierarchyNode = ReflectedHierarchy.Create(obj);
+            var hierarchyNode = ReflectedHierarchyFactory.Create(obj);
 
             // ACT
 
@@ -190,7 +190,7 @@ namespace Elementary.Compare.Test
         {
             // ARRANGE
 
-            var hierarchyNode = ReflectedHierarchy.Create("test");
+            var hierarchyNode = ReflectedHierarchyFactory.Create("test");
 
             // ACT
 
@@ -220,8 +220,8 @@ namespace Elementary.Compare.Test
                 b = "b"
             };
 
-            var hierarchyNode1 = ReflectedHierarchy.Create(obj1);
-            var hierarchyNode2 = ReflectedHierarchy.Create(obj2);
+            var hierarchyNode1 = ReflectedHierarchyFactory.Create(obj1);
+            var hierarchyNode2 = ReflectedHierarchyFactory.Create(obj2);
 
             // ACT
 
@@ -257,8 +257,8 @@ namespace Elementary.Compare.Test
                 }
             };
 
-            var hierarchyNode1 = ReflectedHierarchy.Create(obj1);
-            var hierarchyNode2 = ReflectedHierarchy.Create(obj2);
+            var hierarchyNode1 = ReflectedHierarchyFactory.Create(obj1);
+            var hierarchyNode2 = ReflectedHierarchyFactory.Create(obj2);
 
             // ACT
 
@@ -281,7 +281,7 @@ namespace Elementary.Compare.Test
             // ARRANGE
 
             var obj = new { property = (string)"1" };
-            var hierarchyNode = ReflectedHierarchy.Create(obj);
+            var hierarchyNode = ReflectedHierarchyFactory.Create(obj);
 
             // ACT
 
@@ -299,7 +299,7 @@ namespace Elementary.Compare.Test
             // ARRANGE
 
             var obj = new { property = (string)"1" };
-            var hierarchyNode = ReflectedHierarchy.Create(obj);
+            var hierarchyNode = ReflectedHierarchyFactory.Create(obj);
 
             // ACT
 
@@ -316,7 +316,7 @@ namespace Elementary.Compare.Test
             // ARRANGE
 
             var obj = new { property = new[] { 1, 2 } };
-            var (_, hierarchyNode) = ReflectedHierarchy.Create(obj).TryGetChildNode("property");
+            var (_, hierarchyNode) = ReflectedHierarchyFactory.Create(obj).TryGetChildNode("property");
 
             // ACT
 
@@ -334,7 +334,7 @@ namespace Elementary.Compare.Test
             // ARRANGE
 
             var obj = new { property = new List<int> { 1, 2 } };
-            var (_, hierarchyNode) = ReflectedHierarchy.Create(obj).TryGetChildNode("property");
+            var (_, hierarchyNode) = ReflectedHierarchyFactory.Create(obj).TryGetChildNode("property");
 
             // ACT
 
@@ -352,7 +352,7 @@ namespace Elementary.Compare.Test
             // ARRANGE
 
             var obj = new { property = new[] { 1, 2 } };
-            var (_, hierarchyNode) = ReflectedHierarchy.Create(obj).TryGetChildNode("property");
+            var (_, hierarchyNode) = ReflectedHierarchyFactory.Create(obj).TryGetChildNode("property");
 
             // ACT
 
@@ -369,7 +369,7 @@ namespace Elementary.Compare.Test
             // ARRANGE
 
             var obj = new { property = new[] { 1, 2 } };
-            var (_, hierarchyNode) = ReflectedHierarchy.Create(obj).TryGetChildNode("property");
+            var (_, hierarchyNode) = ReflectedHierarchyFactory.Create(obj).TryGetChildNode("property");
 
             // ACT
 
@@ -386,7 +386,7 @@ namespace Elementary.Compare.Test
             // ARRANGE
 
             var obj = new { property = new List<int> { 1, 2 } };
-            var (_, hierarchyNode) = ReflectedHierarchy.Create(obj).TryGetChildNode("property");
+            var (_, hierarchyNode) = ReflectedHierarchyFactory.Create(obj).TryGetChildNode("property");
 
             // ACT
 
@@ -403,7 +403,7 @@ namespace Elementary.Compare.Test
             // ARRANGE
 
             var obj = new { property = new List<int> { 1, 2 } };
-            var (_, hierarchyNode) = ReflectedHierarchy.Create(obj).TryGetChildNode("property");
+            var (_, hierarchyNode) = ReflectedHierarchyFactory.Create(obj).TryGetChildNode("property");
 
             // ACT
 
@@ -413,7 +413,6 @@ namespace Elementary.Compare.Test
 
             Assert.False(success);
         }
-
 
         #endregion TryGet node by name
 
@@ -425,7 +424,7 @@ namespace Elementary.Compare.Test
         {
             // ARRANGE
 
-            var hierarchyNode = ReflectedHierarchy.Create(1);
+            var hierarchyNode = ReflectedHierarchyFactory.Create(1);
 
             // ACT
 
@@ -443,7 +442,7 @@ namespace Elementary.Compare.Test
         {
             // ARRANGE
 
-            var hierarchyNode = ReflectedHierarchy.Create("1");
+            var hierarchyNode = ReflectedHierarchyFactory.Create("1");
 
             // ACT
 
@@ -461,7 +460,7 @@ namespace Elementary.Compare.Test
         {
             // ARRANGE
 
-            var hierarchyNode = ReflectedHierarchy.Create(new[] { 1, 2 });
+            var hierarchyNode = ReflectedHierarchyFactory.Create(new[] { 1, 2 });
 
             // ACT
 
@@ -479,7 +478,7 @@ namespace Elementary.Compare.Test
             // ARRANGE
 
             var obj = new { property = (string)"1" };
-            var hierarchyNode = ReflectedHierarchy.Create(obj);
+            var hierarchyNode = ReflectedHierarchyFactory.Create(obj);
 
             // ACT
 
@@ -497,7 +496,7 @@ namespace Elementary.Compare.Test
             // ARRANGE
 
             var obj = new { property = 1 };
-            var hierarchyNode = ReflectedHierarchy.Create(obj);
+            var hierarchyNode = ReflectedHierarchyFactory.Create(obj);
 
             // ACT
 
@@ -515,7 +514,7 @@ namespace Elementary.Compare.Test
             // ARRANGE
 
             var obj = new { property = new[] { 1, 2 } };
-            var hierarchyNode = ReflectedHierarchy.Create(obj);
+            var hierarchyNode = ReflectedHierarchyFactory.Create(obj);
 
             // ACT
 
@@ -533,7 +532,7 @@ namespace Elementary.Compare.Test
             // ARRANGE
 
             var obj = new { property = new List<int> { 1, 2 } };
-            var hierarchyNode = ReflectedHierarchy.Create(obj);
+            var hierarchyNode = ReflectedHierarchyFactory.Create(obj);
 
             // ACT
 
@@ -551,7 +550,7 @@ namespace Elementary.Compare.Test
             // ARRANGE
 
             var obj = new { property = new[] { 1, 2 } };
-            var hierarchyNode = ReflectedHierarchy.Create(obj);
+            var hierarchyNode = ReflectedHierarchyFactory.Create(obj);
 
             // ACT
 
@@ -569,7 +568,7 @@ namespace Elementary.Compare.Test
             // ARRANGE
 
             var obj = new { property = new List<int> { 1, 2 } };
-            var hierarchyNode = ReflectedHierarchy.Create(obj);
+            var hierarchyNode = ReflectedHierarchyFactory.Create(obj);
 
             // ACT
 
@@ -587,7 +586,7 @@ namespace Elementary.Compare.Test
             // ARRANGE
 
             var obj = new { property = 1 };
-            var hierarchyNode = ReflectedHierarchy.Create(obj);
+            var hierarchyNode = ReflectedHierarchyFactory.Create(obj);
 
             // ACT
 
@@ -605,7 +604,7 @@ namespace Elementary.Compare.Test
             // ARRANGE
 
             var obj = new { property = "1" };
-            var hierarchyNode = ReflectedHierarchy.Create(obj);
+            var hierarchyNode = ReflectedHierarchyFactory.Create(obj);
 
             // ACT
 
@@ -623,7 +622,7 @@ namespace Elementary.Compare.Test
             // ARRANGE
 
             var obj = new { property = new[] { 1, 2 } };
-            var hierarchyNode = ReflectedHierarchy.Create(obj);
+            var hierarchyNode = ReflectedHierarchyFactory.Create(obj);
 
             // ACT
 
@@ -641,7 +640,7 @@ namespace Elementary.Compare.Test
             // ARRANGE
 
             var obj = new { property = new[] { 1, 2 } };
-            var hierarchyNode = ReflectedHierarchy.Create(obj);
+            var hierarchyNode = ReflectedHierarchyFactory.Create(obj);
 
             // ACT
 
@@ -659,7 +658,7 @@ namespace Elementary.Compare.Test
             // ARRANGE
 
             var obj = new { property = 1 };
-            var hierarchyNode = ReflectedHierarchy.Create(obj);
+            var hierarchyNode = ReflectedHierarchyFactory.Create(obj);
 
             // ACT
 
@@ -675,7 +674,7 @@ namespace Elementary.Compare.Test
         {
             // ARRANGE
 
-            var hierarchyNode = ReflectedHierarchy.Create(1);
+            var hierarchyNode = ReflectedHierarchyFactory.Create(1);
 
             // ACT
 
@@ -688,8 +687,6 @@ namespace Elementary.Compare.Test
 
         #endregion TryGet value from node
 
-        
-
         #region Taverse the hierachy
 
         [Fact]
@@ -701,7 +698,7 @@ namespace Elementary.Compare.Test
 
             // ACT
 
-            var result = ReflectedHierarchy.Create(obj).Descendants().ToArray();
+            var result = ReflectedHierarchyFactory.Create(obj).Descendants().ToArray();
 
             // ASSERT
 
@@ -720,7 +717,7 @@ namespace Elementary.Compare.Test
 
             // ACT
 
-            var result = ReflectedHierarchy.Create(obj).Descendants().ToArray();
+            var result = ReflectedHierarchyFactory.Create(obj).Descendants().ToArray();
 
             // ASSERT
 
@@ -739,7 +736,7 @@ namespace Elementary.Compare.Test
 
             // ACT
 
-            var result = ReflectedHierarchy.Create(obj).Descendants().ToArray();
+            var result = ReflectedHierarchyFactory.Create(obj).Descendants().ToArray();
 
             // ASSERT
             // retuirns property "a" and a's value property Length. Chars is ignored.
@@ -760,7 +757,7 @@ namespace Elementary.Compare.Test
 
             // ACT
 
-            var result = ReflectedHierarchy.Create(obj).Descendants().ToArray();
+            var result = ReflectedHierarchyFactory.Create(obj).Descendants().ToArray();
 
             // ASSERT
 

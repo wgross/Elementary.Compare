@@ -1,6 +1,6 @@
 ﻿using Elementary.Hierarchy;
 
-namespace Elementary.Compare
+namespace Elementary.Compare.ReflectedHierarchy
 {
     public interface IReflectedHierarchyNode : IHasChildNodes<IReflectedHierarchyNode>, IHasIdentifiableChildNodes<string, IReflectedHierarchyNode>
     {

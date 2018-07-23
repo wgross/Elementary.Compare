@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Elementary.Compare
+namespace Elementary.Compare.ReflectedHierarchy
 {
     public class FlattedObjectHierarchyNodeFactory : ReflectedHierarchyNodeFactory, IReflectedHierarchyNodeFactory
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 
-namespace Elementary.Compare
+namespace Elementary.Compare.ReflectedHierarchy
 {
     public sealed class ReflectedHierarchyArrayNode : ReflectedPropertyNodeBase, IReflectedHierarchyNode
     {

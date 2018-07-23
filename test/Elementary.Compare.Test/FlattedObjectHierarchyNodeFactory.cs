@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Elementary.Compare.ReflectedHierarchy;
+using System;
 using Xunit;
 
 namespace Elementary.Compare.Test

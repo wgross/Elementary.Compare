@@ -1,4 +1,4 @@
-﻿namespace Elementary.Compare
+﻿namespace Elementary.Compare.ReflectedHierarchy
 {
     public class ReflectedHierarchyRootNode : ReflectedHierarchyObjectNodeBase, IReflectedHierarchyNode
     {
