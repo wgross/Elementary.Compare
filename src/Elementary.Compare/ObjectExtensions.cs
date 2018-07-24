@@ -10,17 +10,32 @@ namespace Elementary.Compare
 {
     public static class ObjectExtensions
     {
-        public static IEnumerable<KeyValuePair<string, object>> Flatten(this object root)
+        /// <summary>
+        /// Returns a key value stream of pathes to leaves and the leaves values.
+        /// The travesal breaks after a depth of 100 nodes.
+        /// </summary>
+        /// <param name="root"></param>
+        /// <param name="maxDepth"></param>
+        /// <returns></returns>
+        public static IEnumerable<KeyValuePair<string, object>> Flatten(this object root, int? maxDepth = null)
         {
             var h = ReflectedHierarchy.ReflectedHierarchyFactory.Create(root, new ReflectedHierarchyNodeFactory());
             var flatted_h = new Dictionary<string, object>();
-            foreach (var (node, path) in h.DescendantsWithPath(getChildren: n => n.ChildNodes, depthFirst: true, maxDepth: null))
+            foreach (var (node, path) in h.DescendantsWithPath(getChildren: n => n.ChildNodes, depthFirst: true, maxDepth: maxDepth.GetValueOrDefault(100)))
             {
-                if (node.HasChildNodes)
-                    continue;
+                var parentPathAry = path.Select(p => p.Id).ToArray();
+                var pathAsString = $"{string.Join("/", parentPathAry)}/{node.Id}";
+
+                // first check if we are already at max level
+                if (parentPathAry.Length == maxDepth)
+                    throw new InvalidOperationException($"Traversal stopped: maxDepth='{maxDepth.GetValueOrDefault(100)}' was reached at path='{pathAsString}'.");
+
+                if (maxDepth.GetValueOrDefault(100) == parentPathAry.Length)
+                    if (node.HasChildNodes)
+                        continue;
 
                 var (success, value) = node.TryGetValue<object>();
-                var pathAsString = $"{string.Join("/", path.Select(p => p.Id))}/{node.Id}";
+
                 yield return new KeyValuePair<string, object>(pathAsString, value);
             }
         }

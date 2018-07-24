@@ -7,6 +7,16 @@ namespace Elementary.Compare.Test
 {
     public class FlattenObjectTest
     {
+        private class CycleTestClass
+        {
+            public CycleTestClass child { get; set; }
+        }
+
+        private class CycleTestClass2
+        {
+            public CycleTestClass2 child => new CycleTestClass2();
+        }
+
         [Fact]
         public void Create_flat_map_of_properties()
         {
@@ -45,7 +55,7 @@ namespace Elementary.Compare.Test
 
             // ASSERT
 
-            Assert.Equal(1, result.Count);
+            Assert.Single(result);
             Assert.True(result.ContainsKey("/b"));
             Assert.IsType<string>(result.Single().Value);
         }
@@ -93,6 +103,44 @@ namespace Elementary.Compare.Test
             Assert.Single(result);
             Assert.True(result.ContainsKey("/a/b"));
             Assert.IsType<DateTime>(result.Single().Value);
+        }
+
+        [Fact]
+        public void Create_flat_map_breaks_on_cycle_after_maxDepth()
+        {
+            // ARRANGE
+
+            var obj = new CycleTestClass
+            {
+                child = new CycleTestClass()
+            };
+            obj.child.child = obj;
+
+            // ACT
+
+            var result = Assert.Throws<InvalidOperationException>(() => new Dictionary<string, object>(obj.Flatten(maxDepth: 1)));
+
+            // ASSERT
+
+            Assert.Contains("maxDepth='1'", result.Message);
+            Assert.Contains("path='/child'", result.Message);
+        }
+
+        [Fact]
+        public void Create_flat_map_breaks_on_cycle_after_maxDepth_self_replicating()
+        {
+            // ARRANGE
+
+            var obj = new CycleTestClass2();
+
+            // ACT
+
+            var result = Assert.Throws<InvalidOperationException>(() => new Dictionary<string, object>(obj.Flatten(maxDepth: 10)));
+
+            // ASSERT
+
+            Assert.Contains("maxDepth='10'", result.Message);
+            Assert.Contains("path='/child/child/child/child/child/child/child/child/child/child'", result.Message);
         }
     }
 }
