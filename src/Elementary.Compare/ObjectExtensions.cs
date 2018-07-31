@@ -30,7 +30,7 @@ namespace Elementary.Compare
                 if (parentPathAry.Length == maxDepth)
                     throw new InvalidOperationException($"Traversal stopped: maxDepth='{maxDepth.GetValueOrDefault(100)}' was reached at path='{pathAsString}'.");
 
-                if (maxDepth.GetValueOrDefault(100) == parentPathAry.Length)
+                if (maxDepth.GetValueOrDefault(100) > parentPathAry.Length)
                     if (node.HasChildNodes)
                         continue;
 
