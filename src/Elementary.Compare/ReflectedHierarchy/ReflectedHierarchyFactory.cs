@@ -1,6 +1,6 @@
-﻿namespace Elementary.Hierarchy.Reflection
+﻿namespace Elementary.Compare.ReflectedHierarchy
 {
-    public class ReflectedHierarchy
+    public class ReflectedHierarchyFactory
     {
         public static IReflectedHierarchyNode Create<T>(T root)
         {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Elementary.Hierarchy.Reflection
+namespace Elementary.Compare
 {
     public class DeepCompareResult
     {

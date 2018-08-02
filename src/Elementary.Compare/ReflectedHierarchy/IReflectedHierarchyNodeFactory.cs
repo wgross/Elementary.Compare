@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Elementary.Hierarchy.Reflection
+namespace Elementary.Compare.ReflectedHierarchy
 {
     public interface IReflectedHierarchyNodeFactory
     {

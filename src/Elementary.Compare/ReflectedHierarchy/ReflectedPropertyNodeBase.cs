@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 
-namespace Elementary.Hierarchy.Reflection
+namespace Elementary.Compare.ReflectedHierarchy
 {
     public abstract class ReflectedPropertyNodeBase : ReflectedNodeBase
     {
@@ -24,6 +24,11 @@ namespace Elementary.Hierarchy.Reflection
 
         #region IReflectedHierarchyNode members
 
+        /// <summary>
+        /// The name of a property node is the name of the property it refers to.
+        /// </summary>
+        public string Id => this.propertyInfo.Name;
+
         public (bool, T) TryGetValue<T>()
         {
             var nodeValue = this.NodeValue;
@@ -31,22 +36,6 @@ namespace Elementary.Hierarchy.Reflection
                 return (false, default(T));
 
             return (true, (T)nodeValue);
-        }
-
-        /// <summary>
-        /// The name of a property node is the name of the property it refers to.
-        /// </summary>
-        public string Id => this.propertyInfo.Name;
-
-        protected bool IsNotAssignable<T>()
-        {
-            if (this.propertyInfo.GetSetMethod() == null)
-                return true;
-
-            if (!this.propertyInfo.PropertyType.IsAssignableFrom(typeof(T)))
-                return true;
-
-            return false;
         }
 
         #endregion IReflectedHierarchyNode members
