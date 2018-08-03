@@ -45,5 +45,23 @@ namespace Elementary.Compare.Test.ReflectedHierarchy
             Assert.Equal(value, node.TryGetValue<DateTime>().Item2);
             Assert.Empty(node.ChildNodes);
         }
+
+
+        [Fact]
+        public void RootObjectNode_returns_false_on_invalid_value_type()
+        {
+            // ARRANGE
+
+            var value = DateTime.Now;
+            var node = ReflectedHierarchyFactory.Create(value);
+
+            // ACT
+
+            var (result, _) = node.TryGetValue<int>();
+
+            // ASSERT
+
+            Assert.False(result);
+        }
     }
 }

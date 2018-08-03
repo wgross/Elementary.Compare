@@ -50,5 +50,59 @@ namespace Elementary.Compare.Test.ReflectedHierarchy
             Assert.Equal(1, node.ChildNodes.Single().TryGetValue<int>().Item2);
             Assert.Equal(1, node.TryGetChildNode("0").Item2.TryGetValue<int>().Item2);
         }
+
+        [Fact]
+        public void EnumerableNode_returns_false_on_index_out_of_range()
+        {
+            // ARRANGE
+
+            var value = new { data = new List<int> { 1 } };
+
+            var (_, node) = ReflectedHierarchyFactory.Create(value).TryGetChildNode(nameof(value.data));
+
+            // ACT
+
+            var (result,_) = node.TryGetChildNode("1");
+
+            // ASSERT
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void EnumerableNode_returns_false_on_invalid_index()
+        {
+            // ARRANGE
+
+            var value = new { data = new List<int> { 1 } };
+
+            var (_, node) = ReflectedHierarchyFactory.Create(value).TryGetChildNode(nameof(value.data));
+
+            // ACT
+
+            var (result, _) = node.TryGetChildNode("not int");
+
+            // ASSERT
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void EnumerableNode_returns_false_on_invalid_value_type()
+        {
+            // ARRANGE
+
+            var value = new { data = new List<int> { 1 } };
+
+            var (_, node) = ReflectedHierarchyFactory.Create(value).TryGetChildNode(nameof(value.data));
+
+            // ACT
+
+            var (result, _) = node.TryGetValue<int[]>();
+
+            // ASSERT
+
+            Assert.False(result);
+        }
     }
 }
