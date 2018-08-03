@@ -21,15 +21,17 @@ namespace Elementary.Compare.ReflectedHierarchy
         /// </summary>
         protected object NodeValue => this.instance;
 
-        protected IEnumerable<PropertyInfo> ChildPropertyInfos => this.NodeValue.GetType().GetProperties();
+        protected IEnumerable<PropertyInfo> ChildPropertyInfos => this.NodeValue
+            .GetType()
+            .GetProperties()
+            .OrderBy(pi => pi.Name, StringComparer.OrdinalIgnoreCase);
 
         #region IHasChildNodes members
 
-        public bool HasChildNodes => this.ChildPropertyInfos.Any();
+        public bool HasChildNodes => this.ChildNodes.Any();
 
         public IEnumerable<IReflectedHierarchyNode> ChildNodes => this
             .ChildPropertyInfos
-            .OrderBy(pi => pi.Name, StringComparer.OrdinalIgnoreCase)
             .Select(pi => this.nodeFactory.Create(this.instance, pi))
             .Where(n => n != null);
 

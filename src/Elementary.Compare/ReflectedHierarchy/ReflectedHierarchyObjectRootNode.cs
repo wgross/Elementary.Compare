@@ -1,8 +1,8 @@
 ﻿namespace Elementary.Compare.ReflectedHierarchy
 {
-    public class ReflectedHierarchyRootNode : ReflectedHierarchyObjectNodeBase, IReflectedHierarchyNode
+    public class ReflectedHierarchyObjectRootNode : ReflectedHierarchyObjectNodeBase, IReflectedHierarchyNode
     {
-        public ReflectedHierarchyRootNode(object instance, IReflectedHierarchyNodeFactory nodeFactory)
+        public ReflectedHierarchyObjectRootNode(object instance, IReflectedHierarchyNodeFactory nodeFactory)
             : base(instance, nodeFactory)
         { }
 
