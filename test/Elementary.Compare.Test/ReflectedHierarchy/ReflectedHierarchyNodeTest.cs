@@ -109,6 +109,44 @@ namespace Elementary.Compare.Test.ReflectedHierarchy
         }
 
         [Fact]
+        public void Create_node_from_scalar_nullable_value_type_property()
+        {
+            // ARRANGE
+
+            var obj = new { property = (int?)1 };
+            var hierarchyNode = ReflectedHierarchyFactory.Create(obj);
+
+            // ACT
+
+            var result = hierarchyNode.Children().ToArray();
+
+            // ASSERT
+
+            Assert.Single(result);
+            Assert.False(result.Single().HasChildNodes);
+            Assert.Equal("property", result.Single().Id);
+        }
+
+        [Fact]
+        public void Create_node_from_null_in_nullable_value_type_property()
+        {
+            // ARRANGE
+
+            var obj = new { property = (int?)null };
+            var hierarchyNode = ReflectedHierarchyFactory.Create(obj);
+
+            // ACT
+
+            var result = hierarchyNode.Children().ToArray();
+
+            // ASSERT
+
+            Assert.Single(result);
+            Assert.False(result.Single().HasChildNodes);
+            Assert.Equal("property", result.Single().Id);
+        }
+
+        [Fact]
         public void Create_node_from_scalar_ref_type_property()
         {
             // ARRANGE
@@ -495,6 +533,24 @@ namespace Elementary.Compare.Test.ReflectedHierarchy
         }
 
         [Fact]
+        public void Get_struct_value_null_from_property_node()
+        {
+            // ARRANGE
+
+            var obj = new { property = (int?) null };
+            var hierarchyNode = ReflectedHierarchyFactory.Create(obj);
+
+            // ACT
+
+            var (success, value) = hierarchyNode.TryGetChildNode("property").Item2.TryGetValue<int?>();
+
+            // ASSERT
+
+            Assert.True(success);
+            Assert.Null(value);
+        }
+
+        [Fact]
         public void Get_array_value_from_enumerable_node()
         {
             // ARRANGE
@@ -647,6 +703,24 @@ namespace Elementary.Compare.Test.ReflectedHierarchy
             var hierarchyNode = ReflectedHierarchyFactory.Create(obj);
 
             // ACT
+
+            var (success, value) = hierarchyNode.TryGetChildNode("property").Item2.TryGetValue<string>();
+
+            // ASSERT
+
+            Assert.False(success);
+        }
+
+        [Fact]
+        public void Get_null_value_from_property_node_fails_on_wrong_type()
+        {
+            // ARRANGE
+
+            var obj = new { property = (int?)null };
+            var hierarchyNode = ReflectedHierarchyFactory.Create(obj);
+
+            // ACT
+            // ask for the wrong type fails because propery tyoe in incompatible
 
             var (success, value) = hierarchyNode.TryGetChildNode("property").Item2.TryGetValue<string>();
 

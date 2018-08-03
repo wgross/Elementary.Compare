@@ -27,6 +27,8 @@ namespace Elementary.Compare.Test
             // ASSERT
 
             Assert.True(result.AreEqual);
+            Assert.Single(result.EqualValues);
+            Assert.Equal(left.PropertyPath(p => p.a).ToString(), result.EqualValues.Single());
         }
 
         [Fact]
@@ -46,6 +48,7 @@ namespace Elementary.Compare.Test
             // ASSERT
 
             Assert.True(result.AreEqual);
+            Assert.Single(result.EqualValues);
         }
 
         [Fact]
@@ -97,8 +100,8 @@ namespace Elementary.Compare.Test
             // ASSERT
 
             Assert.False(result.AreEqual);
-            Assert.Equal("/a", result.RightLeafIsMissing.Single());
-            Assert.Equal("/b", result.LeftLeafIsMissing.Single());
+            Assert.Equal("a", result.RightLeafIsMissing.Single());
+            Assert.Equal("b", result.LeftLeafIsMissing.Single());
         }
 
         [Fact]
@@ -123,8 +126,8 @@ namespace Elementary.Compare.Test
             // ASSERT
 
             Assert.False(result.AreEqual);
-            Assert.Equal("/a/0", result.LeftLeafIsMissing.Single());
-            Assert.Equal("/a", result.RightLeafIsMissing.Single());
+            Assert.Equal("a/0", result.LeftLeafIsMissing.Single());
+            Assert.Equal("a", result.RightLeafIsMissing.Single());
         }
 
         [Fact]
@@ -149,7 +152,32 @@ namespace Elementary.Compare.Test
             // ASSERT
 
             Assert.False(result.AreEqual);
-            Assert.Equal("/a", result.DifferentValues.Single());
+            Assert.Equal("a", result.DifferentValues.Single());
+        }
+
+        [Fact]
+        public void Instances_not_equal_on_different_values_null()
+        {
+            // ARRANGE
+
+            var left = new
+            {
+                a = "b",
+            };
+
+            var right = new
+            {
+                a = (string)null
+            };
+
+            // ACT
+
+            var result = left.DeepCompare(right);
+
+            // ASSERT
+
+            Assert.False(result.AreEqual);
+            Assert.Equal("a", result.DifferentValues.Single());
         }
     }
 }

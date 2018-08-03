@@ -35,8 +35,8 @@ namespace Elementary.Compare.Test
             // ASSERT
 
             Assert.Equal(2, result.Count);
-            Assert.True(result.ContainsKey("/a"));
-            Assert.True(result.ContainsKey("/b"));
+            Assert.True(result.ContainsKey("a"));
+            Assert.True(result.ContainsKey("b"));
         }
 
         [Fact]
@@ -56,7 +56,7 @@ namespace Elementary.Compare.Test
             // ASSERT
 
             Assert.Single(result);
-            Assert.True(result.ContainsKey("/b"));
+            Assert.True(result.ContainsKey("b"));
             Assert.IsType<string>(result.Single().Value);
         }
 
@@ -77,7 +77,7 @@ namespace Elementary.Compare.Test
             // ASSERT
 
             Assert.Single(result);
-            Assert.True(result.ContainsKey("/a"));
+            Assert.True(result.ContainsKey("a"));
             Assert.IsType<DateTime>(result.Single().Value);
         }
 
@@ -101,7 +101,7 @@ namespace Elementary.Compare.Test
             // ASSERT
 
             Assert.Single(result);
-            Assert.True(result.ContainsKey("/a/b"));
+            Assert.True(result.ContainsKey("a/b"));
             Assert.IsType<DateTime>(result.Single().Value);
         }
 
@@ -123,7 +123,7 @@ namespace Elementary.Compare.Test
             // ASSERT
 
             Assert.Contains("maxDepth='1'", result.Message);
-            Assert.Contains("path='/child'", result.Message);
+            Assert.Contains("path='child'", result.Message);
         }
 
         [Fact]
@@ -140,7 +140,7 @@ namespace Elementary.Compare.Test
             // ASSERT
 
             Assert.Contains("maxDepth='10'", result.Message);
-            Assert.Contains("path='/child/child/child/child/child/child/child/child/child/child'", result.Message);
+            Assert.Contains("path='child/child/child/child/child/child/child/child/child/child'", result.Message);
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Elementary.Compare
             foreach (var (node, path) in h.DescendantsWithPath(getChildren: n => n.ChildNodes, depthFirst: true, maxDepth: maxDepth.GetValueOrDefault(100)))
             {
                 var parentPathAry = path.Select(p => p.Id).ToArray();
-                var pathAsString = $"{string.Join("/", parentPathAry)}/{node.Id}";
+                var pathAsString = $"{string.Join("/", parentPathAry)}/{node.Id}".TrimStart('/');
 
                 // first check if we are already at max level
                 if (parentPathAry.Length == maxDepth)
@@ -71,8 +71,9 @@ namespace Elementary.Compare
 
         public static DeepCompareResult DeepCompare(this object left, object right)
         {
-            if (ReferenceEquals(left, right))
-                return new DeepCompareResult();
+            // optimization removed: it desnfill the 'EqualValues' list
+            // if (ReferenceEquals(left, right))
+            //     return new DeepCompareResult();
 
             var leftLeafEnumerator = left.Flatten().GetEnumerator();
             var rightLeaves = right.Flatten().ToDictionary(kv => kv.Key);
@@ -82,7 +83,7 @@ namespace Elementary.Compare
             {
                 if (rightLeaves.TryGetValue(leftLeaf.Key, out var rightLeaf))
                 {
-                    DeppCompareLeaves(leftLeaf, rightLeaf, compareResult);
+                    DeepCompareLeaves(leftLeaf, rightLeaf, compareResult);
                     rightLeaves.Remove(leftLeaf.Key);
                 }
                 else
@@ -99,14 +100,18 @@ namespace Elementary.Compare
             });
         }
 
-        private static void DeppCompareLeaves(KeyValuePair<string, object> leftLeaf, KeyValuePair<string, object> rightLeaf, DeepCompareResult compareResult)
+        private static void DeepCompareLeaves(KeyValuePair<string, object> leftLeaf, KeyValuePair<string, object> rightLeaf, DeepCompareResult compareResult)
         {
-            if (!EqualityComparer<Type>.Default.Equals(leftLeaf.Value.GetType(), rightLeaf.Value.GetType()))
+            if (!EqualityComparer<Type>.Default.Equals(GetTypeOfValueSafe(leftLeaf.Value), GetTypeOfValueSafe(rightLeaf.Value)))
                 compareResult.DifferentTypes.Add(leftLeaf.Key);
 
             if (!EqualityComparer<object>.Default.Equals(leftLeaf.Value, rightLeaf.Value))
                 compareResult.DifferentValues.Add(leftLeaf.Key);
+
+            compareResult.EqualValues.Add(leftLeaf.Key);
         }
+
+        private static Type GetTypeOfValueSafe(object value) => value?.GetType() ?? typeof(object);
 
         public static HierarchyPath<string> PropertyPath<TRoot>(this TRoot root, Expression<Func<TRoot, object>> path)
         {

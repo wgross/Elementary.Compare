@@ -100,6 +100,6 @@ namespace Elementary.Compare.Test.ReflectedHierarchy
             // ASSERT
 
             Assert.Null(result);
-        }
+        }      
     }
 }

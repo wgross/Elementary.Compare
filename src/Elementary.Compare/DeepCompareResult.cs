@@ -14,5 +14,7 @@ namespace Elementary.Compare
         public IList<string> RightLeafIsMissing { get; } = new List<string>();
 
         public IList<string> LeftLeafIsMissing { get; } = new List<string>();
+
+        public IList<string> EqualValues { get; } = new List<string>();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace Elementary.Compare.ReflectedHierarchy
@@ -20,7 +21,7 @@ namespace Elementary.Compare.ReflectedHierarchy
         /// </summary>
         protected object NodeValue => this.propertyInfo.GetValue(this.instance);
 
-        protected IEnumerable<PropertyInfo> ChildPropertyInfos => this.NodeValue.GetType().GetProperties();
+        protected IEnumerable<PropertyInfo> ChildPropertyInfos => this.NodeValue?.GetType().GetProperties() ?? Enumerable.Empty<PropertyInfo>();
 
         #region IReflectedHierarchyNode members
 
@@ -32,8 +33,13 @@ namespace Elementary.Compare.ReflectedHierarchy
         public (bool, T) TryGetValue<T>()
         {
             var nodeValue = this.NodeValue;
-            if (!typeof(T).IsAssignableFrom(nodeValue.GetType()))
-                return (false, default(T));
+            if (nodeValue != null)
+            {
+                if (!typeof(T).IsAssignableFrom(nodeValue.GetType()))
+                    return (false, default(T));
+            }
+            else if (!typeof(T).IsAssignableFrom(this.propertyInfo.PropertyType))
+               return (false, default(T));
 
             return (true, (T)nodeValue);
         }
