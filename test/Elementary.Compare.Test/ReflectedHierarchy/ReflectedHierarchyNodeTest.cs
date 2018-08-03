@@ -296,7 +296,7 @@ namespace Elementary.Compare.Test.ReflectedHierarchy
         #region TryGet node by name
 
         [Fact]
-        public void Retrieve_property_as_child_from_object_node()
+        public void Retrieve_property_as_child_from_root_node()
         {
             // ARRANGE
 
@@ -306,6 +306,24 @@ namespace Elementary.Compare.Test.ReflectedHierarchy
             // ACT
 
             var (success, result) = hierarchyNode.TryGetChildNode("property");
+
+            // ASSERT
+
+            Assert.True(success);
+            Assert.Equal("property", result.Id);
+        }
+
+        [Fact]
+        public void Retrieve_property_as_child_from_property_node()
+        {
+            // ARRANGE
+
+            var obj = new { child = new { property = (string)"1" } };
+            var hierarchyNode = ReflectedHierarchyFactory.Create(obj);
+
+            // ACT
+
+            var (success, result) = hierarchyNode.TryGetChildNode("child").Item2.TryGetChildNode("property");
 
             // ASSERT
 
