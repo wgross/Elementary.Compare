@@ -10,5 +10,7 @@
             this.instance = instance;
             this.nodeFactory = nodeFactory;
         }
+
+        protected virtual object NodeValue { get; }
     }
 }

@@ -19,7 +19,7 @@ namespace Elementary.Compare.ReflectedHierarchy
         /// A property node resolves its inner value by getting the property value of the instance the property
         /// actually belongs to,
         /// </summary>
-        protected object NodeValue => this.propertyInfo.GetValue(this.instance);
+        override protected object NodeValue => this.propertyInfo.GetValue(this.instance);
 
         protected IEnumerable<PropertyInfo> ChildPropertyInfos => this.NodeValue?.GetType().GetProperties() ?? Enumerable.Empty<PropertyInfo>();
 

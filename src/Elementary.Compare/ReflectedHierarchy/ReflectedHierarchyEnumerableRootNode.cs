@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 
 namespace Elementary.Compare.ReflectedHierarchy
 {
-    public class ReflectedHierarchyEnumerableRootNode : ReflectedHierarchyNodeBase, IReflectedHierarchyNode
+    public class ReflectedHierarchyEnumerableRootNode : ReflectedHierarchyEnumerableNodeBase, IReflectedHierarchyNode
     {
         public ReflectedHierarchyEnumerableRootNode(object instance, IReflectedHierarchyNodeFactory nodeFactory)
             : base(instance, nodeFactory)
@@ -16,22 +14,7 @@ namespace Elementary.Compare.ReflectedHierarchy
         /// A property node resolves its inner value by getting the property value of the instance the property
         /// actually belongs to,
         /// </summary>
-        private object NodeValue => this.instance;
-
-        #region IHasChildNodes members
-
-        public bool HasChildNodes => ((IEnumerable)this.NodeValue).Cast<object>().Any();
-
-        public IEnumerable<IReflectedHierarchyNode> ChildNodes
-        {
-            get
-            {
-                int i = 0;
-                return ((IEnumerable)this.NodeValue).Cast<object>().Select(n => this.nodeFactory.Create(n, i++.ToString(CultureInfo.InvariantCulture)));
-            }
-        }
-
-        #endregion IHasChildNodes members
+        override protected object NodeValue => this.instance;
 
         public (bool, IReflectedHierarchyNode) TryGetChildNode(string id)
         {
@@ -50,15 +33,6 @@ namespace Elementary.Compare.ReflectedHierarchy
         #region IReflectedHierarchyNode members
 
         public string Id => string.Empty;
-
-        public (bool, T) TryGetValue<T>()
-        {
-            var nodeValue = this.NodeValue;
-            if (!typeof(T).IsAssignableFrom(nodeValue.GetType()))
-                return (false, default(T));
-
-            return (true, (T)nodeValue);
-        }
 
         #endregion IReflectedHierarchyNode members
     }
