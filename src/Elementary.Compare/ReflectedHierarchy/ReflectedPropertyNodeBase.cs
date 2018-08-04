@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace Elementary.Compare.ReflectedHierarchy
 {
-    public abstract class ReflectedPropertyNodeBase : ReflectedNodeBase
+    public abstract class ReflectedPropertyNodeBase : ReflectedHierarchyNodeBase
     {
         protected readonly PropertyInfo propertyInfo;
 

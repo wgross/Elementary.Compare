@@ -6,16 +6,11 @@ using System.Linq;
 
 namespace Elementary.Compare.ReflectedHierarchy
 {
-    public class ReflectedHierarchyEnumerableRootNode : IReflectedHierarchyNode
+    public class ReflectedHierarchyEnumerableRootNode : ReflectedHierarchyNodeBase, IReflectedHierarchyNode
     {
-        private readonly object instance;
-        private readonly IReflectedHierarchyNodeFactory nodeFactory;
-
         public ReflectedHierarchyEnumerableRootNode(object instance, IReflectedHierarchyNodeFactory nodeFactory)
-        {
-            this.instance = instance;
-            this.nodeFactory = nodeFactory;
-        }
+            : base(instance, nodeFactory)
+        { }
 
         /// <summary>
         /// A property node resolves its inner value by getting the property value of the instance the property
