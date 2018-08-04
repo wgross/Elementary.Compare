@@ -28,7 +28,7 @@ namespace Elementary.Compare.Test
 
             Assert.True(result.AreEqual);
             Assert.Single(result.EqualValues);
-            Assert.Equal(left.PropertyPath(p => p.a).ToString(), result.EqualValues.Single());
+            Assert.Equal("a", result.EqualValues.Single());
         }
 
         [Fact]

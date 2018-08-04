@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using System.Collections.Generic;
+using Xunit;
 
 namespace Elementary.Compare.Test
 {
@@ -11,12 +12,20 @@ namespace Elementary.Compare.Test
 
             var left = new
             {
-                a = "a"
+                a = "a",
+                b = 1,
+                c = new[] { 1, 2 },
+                d = new List<int> { 1, 2 },
+                e = new List<int> { 1, 2 }
             };
 
             var right = new
             {
-                a = "a"
+                a = "a",
+                b = 1,
+                c = new[] { 1, 2 },
+                d = new List<int> { 1, 2 },
+                e = new[] { 1, 2 }
             };
 
             // ACT
@@ -111,6 +120,30 @@ namespace Elementary.Compare.Test
             var right = new
             {
                 a = "a"
+            };
+
+            // ACT
+
+            var result = left.DeepEquals(right);
+
+            // ASSERT
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void Instances_not_equal_on_different_values()
+        {
+            // ARRANGE
+
+            var left = new
+            {
+                a = "a",
+            };
+
+            var right = new
+            {
+                a = "b"
             };
 
             // ACT
