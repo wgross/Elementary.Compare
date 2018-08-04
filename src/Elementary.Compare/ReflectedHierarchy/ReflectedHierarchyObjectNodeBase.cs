@@ -5,23 +5,13 @@ using System.Reflection;
 
 namespace Elementary.Compare.ReflectedHierarchy
 {
-    public abstract class ReflectedHierarchyObjectNodeBase
+    public abstract class ReflectedHierarchyObjectNodeBase : ReflectedHierarchyNodeBase
     {
-        protected object instance;
-        protected readonly IReflectedHierarchyNodeFactory nodeFactory;
+        public ReflectedHierarchyObjectNodeBase(IReflectedHierarchyNodeFactory nodeFactory, IReflectedHierarchyNodeFlyweight state)
+            : base(nodeFactory, state)
+        { }
 
-        public ReflectedHierarchyObjectNodeBase(object instance, IReflectedHierarchyNodeFactory nodeFactory)
-        {
-            this.instance = instance;
-            this.nodeFactory = nodeFactory;
-        }
-
-        /// <summary>
-        /// The value of an object node is the object instance itself
-        /// </summary>
-        protected object NodeValue => this.instance;
-
-        protected IEnumerable<PropertyInfo> ChildPropertyInfos => this.NodeValue
+        protected IEnumerable<PropertyInfo> ChildPropertyInfos => this.State.NodeValue
             .GetType()
             .GetProperties()
             .OrderBy(pi => pi.Name, StringComparer.OrdinalIgnoreCase);
@@ -32,7 +22,7 @@ namespace Elementary.Compare.ReflectedHierarchy
 
         public IEnumerable<IReflectedHierarchyNode> ChildNodes => this
             .ChildPropertyInfos
-            .Select(pi => this.nodeFactory.Create(this.instance, pi))
+            .Select(pi => this.nodeFactory.Create(this.State.NodeValue, pi))
             .Where(n => n != null);
 
         #endregion IHasChildNodes members
@@ -43,7 +33,7 @@ namespace Elementary.Compare.ReflectedHierarchy
         {
             var childNode = this.ChildPropertyInfos
                .Where(pi => pi.Name.Equals(id))
-               .Select(pi => this.nodeFactory.Create(this.NodeValue, pi))
+               .Select(pi => this.nodeFactory.Create(this.State.NodeValue, pi))
                .FirstOrDefault();
 
             return (childNode != null, childNode);
@@ -60,8 +50,8 @@ namespace Elementary.Compare.ReflectedHierarchy
         /// <returns></returns>
         public (bool, T) TryGetValue<T>()
         {
-            var nodeValue = this.NodeValue;
-            if (!typeof(T).IsAssignableFrom(nodeValue.GetType()))
+            var nodeValue = this.State.NodeValue;
+            if (!typeof(T).IsAssignableFrom(this.State.NodeValueType))
                 return (false, default(T));
 
             return (true, (T)nodeValue);
