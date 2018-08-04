@@ -14,6 +14,8 @@ namespace Elementary.Compare.ReflectedHierarchy
         {
         }
 
+        private IEnumerable<object> ChildNodeItems => ((IEnumerable)this.State.NodeValue).Cast<object>();
+
         #region IHasChildNodes members
 
         public bool HasChildNodes => ((IEnumerable)this.State.NodeValue).Cast<object>().Any();
@@ -23,7 +25,7 @@ namespace Elementary.Compare.ReflectedHierarchy
             get
             {
                 int i = 0;
-                return ((IEnumerable)this.State.NodeValue).Cast<object>().Select(n => this.nodeFactory.Create(n, i++.ToString(CultureInfo.InvariantCulture)));
+                return this.ChildNodeItems.Select(n => this.nodeFactory.Create(n, i++.ToString(CultureInfo.InvariantCulture)));
             }
         }
 
@@ -37,7 +39,7 @@ namespace Elementary.Compare.ReflectedHierarchy
                 return (false, null);
             try
             {
-                return (true, this.nodeFactory.Create(((IEnumerable)this.State.NodeValue).Cast<object>().ElementAt(index), id));
+                return (true, this.nodeFactory.Create(this.ChildNodeItems.ElementAt(index), id));
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -46,18 +48,5 @@ namespace Elementary.Compare.ReflectedHierarchy
         }
 
         #endregion IHasIdentifiableChildNodes
-
-        #region IReflectedHierarchyNode members
-
-        public (bool, T) TryGetValue<T>()
-        {
-            var nodeValue = this.State.NodeValue;
-            if (!typeof(T).IsAssignableFrom(nodeValue.GetType()))
-                return (false, default(T));
-
-            return (true, (T)nodeValue);
-        }
-
-        #endregion IReflectedHierarchyNode members
     }
 }

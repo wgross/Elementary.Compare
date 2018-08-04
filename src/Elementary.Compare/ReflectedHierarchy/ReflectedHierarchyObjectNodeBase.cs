@@ -11,8 +11,7 @@ namespace Elementary.Compare.ReflectedHierarchy
             : base(nodeFactory, state)
         { }
 
-        protected IEnumerable<PropertyInfo> ChildPropertyInfos => this.State.NodeValue
-            .GetType()
+        protected IEnumerable<PropertyInfo> ChildPropertyInfos => this.State.NodeValueType
             .GetProperties()
             .OrderBy(pi => pi.Name, StringComparer.OrdinalIgnoreCase);
 
@@ -40,23 +39,5 @@ namespace Elementary.Compare.ReflectedHierarchy
         }
 
         #endregion IHasIdentifiableChildNode members
-
-        #region IReflectedHierarchyNode members
-
-        /// <summary>
-        /// The valu eof the root node is the object is wraps
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public (bool, T) TryGetValue<T>()
-        {
-            var nodeValue = this.State.NodeValue;
-            if (!typeof(T).IsAssignableFrom(this.State.NodeValueType))
-                return (false, default(T));
-
-            return (true, (T)nodeValue);
-        }
-
-        #endregion IReflectedHierarchyNode members
     }
 }
