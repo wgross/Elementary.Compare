@@ -3,13 +3,8 @@
     public class ReflectedHierarchyObjectRootNode : ReflectedHierarchyObjectNodeBase, IReflectedHierarchyNode
     {
         public ReflectedHierarchyObjectRootNode(object instance, IReflectedHierarchyNodeFactory nodeFactory)
-            : base(instance, nodeFactory)
+            : base(nodeFactory, new ReflectedHierarchyInstanceNodeFlyweight(instance, string.Empty))
         { }
 
-        #region IReflectedHierarchyNode members
-
-        public string Id => string.Empty;
-
-        #endregion IReflectedHierarchyNode members
     }
 }
