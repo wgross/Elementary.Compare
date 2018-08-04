@@ -9,24 +9,21 @@ namespace Elementary.Compare.ReflectedHierarchy
 {
     public abstract class ReflectedHierarchyEnumerableNodeBase : ReflectedHierarchyNodeBase, IHasChildNodes<IReflectedHierarchyNode>
     {
-        protected readonly IReflectedHierarchyNodeFlyweight state;
-
         public ReflectedHierarchyEnumerableNodeBase(object instance, IReflectedHierarchyNodeFactory nodeFactory, IReflectedHierarchyNodeFlyweight state)
-            : base(instance, nodeFactory)
+            : base(instance, nodeFactory, state)
         {
-            this.state = state;
         }
 
         #region IHasChildNodes members
 
-        public bool HasChildNodes => ((IEnumerable)this.state.NodeValue).Cast<object>().Any();
+        public bool HasChildNodes => ((IEnumerable)this.NodeValue).Cast<object>().Any();
 
         public IEnumerable<IReflectedHierarchyNode> ChildNodes
         {
             get
             {
                 int i = 0;
-                return ((IEnumerable)this.state.NodeValue).Cast<object>().Select(n => this.nodeFactory.Create(n, i++.ToString(CultureInfo.InvariantCulture)));
+                return ((IEnumerable)this.NodeValue).Cast<object>().Select(n => this.nodeFactory.Create(n, i++.ToString(CultureInfo.InvariantCulture)));
             }
         }
 
@@ -40,7 +37,7 @@ namespace Elementary.Compare.ReflectedHierarchy
                 return (false, null);
             try
             {
-                return (true, this.nodeFactory.Create(((IEnumerable)this.state.NodeValue).Cast<object>().ElementAt(index), id));
+                return (true, this.nodeFactory.Create(((IEnumerable)this.NodeValue).Cast<object>().ElementAt(index), id));
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -52,11 +49,9 @@ namespace Elementary.Compare.ReflectedHierarchy
 
         #region IReflectedHierarchyNode members
 
-        public string Id => this.state.Id;
-
         public (bool, T) TryGetValue<T>()
         {
-            var nodeValue = this.state.NodeValue;
+            var nodeValue = this.NodeValue;
             if (!typeof(T).IsAssignableFrom(nodeValue.GetType()))
                 return (false, default(T));
 

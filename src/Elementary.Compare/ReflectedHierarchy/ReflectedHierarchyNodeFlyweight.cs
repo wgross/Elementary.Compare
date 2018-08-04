@@ -1,10 +1,13 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 
 namespace Elementary.Compare.ReflectedHierarchy
 {
     public interface IReflectedHierarchyNodeFlyweight
     {
         object NodeValue { get; }
+
+        Type NodeValueType { get; }
 
         string Id { get; }
     }
@@ -23,6 +26,8 @@ namespace Elementary.Compare.ReflectedHierarchy
         public object NodeValue => this.instance;
 
         public string Id => this.id;
+
+        public Type NodeValueType => this.instance.GetType();
     }
 
     public sealed class ReflectedHierarchyInstancePropertyNodeFlyweight : IReflectedHierarchyNodeFlyweight
@@ -40,5 +45,7 @@ namespace Elementary.Compare.ReflectedHierarchy
         public object NodeValue => this.property.GetValue(this.instance);
 
         public string Id => this.property.Name;
+
+        public Type NodeValueType => this.NodeValue?.GetType() ?? this.property.PropertyType;
     }
 }
