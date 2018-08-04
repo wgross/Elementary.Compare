@@ -12,7 +12,7 @@ namespace Elementary.Compare.ReflectedHierarchy
     public sealed class ReflectedHierarchyPropertyNode : ReflectedPropertyNodeBase, IReflectedHierarchyNode
     {
         public ReflectedHierarchyPropertyNode(object instance, PropertyInfo propertyInfo, IReflectedHierarchyNodeFactory nodeFactory)
-            : base(instance, propertyInfo, nodeFactory)
+            : base(nodeFactory, new ReflectedHierarchyInstancePropertyNodeFlyweight(instance, propertyInfo))
 
         {
         }
@@ -24,7 +24,7 @@ namespace Elementary.Compare.ReflectedHierarchy
         public IEnumerable<IReflectedHierarchyNode> ChildNodes => this
             .ChildPropertyInfos
             .OrderBy(pi => pi.Name, StringComparer.OrdinalIgnoreCase)
-            .Select(pi => this.nodeFactory.Create(this.NodeValue, pi))
+            .Select(pi => this.nodeFactory.Create(this.State.NodeValue, pi))
             .Where(n => n != null);
 
         #endregion IHasChildNodes members
@@ -35,7 +35,7 @@ namespace Elementary.Compare.ReflectedHierarchy
         {
             var childNode = this.ChildPropertyInfos
                 .Where(pi => pi.Name.Equals(id))
-                .Select(pi => this.nodeFactory.Create(this.NodeValue, pi))
+                .Select(pi => this.nodeFactory.Create(this.State.NodeValue, pi))
                 .FirstOrDefault();
 
             return (childNode != null, childNode);

@@ -10,20 +10,20 @@ namespace Elementary.Compare.ReflectedHierarchy
     public abstract class ReflectedHierarchyEnumerableNodeBase : ReflectedHierarchyNodeBase, IHasChildNodes<IReflectedHierarchyNode>
     {
         public ReflectedHierarchyEnumerableNodeBase(object instance, IReflectedHierarchyNodeFactory nodeFactory, IReflectedHierarchyNodeFlyweight state)
-            : base(instance, nodeFactory, state)
+            : base(nodeFactory, state)
         {
         }
 
         #region IHasChildNodes members
 
-        public bool HasChildNodes => ((IEnumerable)this.NodeValue).Cast<object>().Any();
+        public bool HasChildNodes => ((IEnumerable)this.State.NodeValue).Cast<object>().Any();
 
         public IEnumerable<IReflectedHierarchyNode> ChildNodes
         {
             get
             {
                 int i = 0;
-                return ((IEnumerable)this.NodeValue).Cast<object>().Select(n => this.nodeFactory.Create(n, i++.ToString(CultureInfo.InvariantCulture)));
+                return ((IEnumerable)this.State.NodeValue).Cast<object>().Select(n => this.nodeFactory.Create(n, i++.ToString(CultureInfo.InvariantCulture)));
             }
         }
 
@@ -37,7 +37,7 @@ namespace Elementary.Compare.ReflectedHierarchy
                 return (false, null);
             try
             {
-                return (true, this.nodeFactory.Create(((IEnumerable)this.NodeValue).Cast<object>().ElementAt(index), id));
+                return (true, this.nodeFactory.Create(((IEnumerable)this.State.NodeValue).Cast<object>().ElementAt(index), id));
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -51,7 +51,7 @@ namespace Elementary.Compare.ReflectedHierarchy
 
         public (bool, T) TryGetValue<T>()
         {
-            var nodeValue = this.NodeValue;
+            var nodeValue = this.State.NodeValue;
             if (!typeof(T).IsAssignableFrom(nodeValue.GetType()))
                 return (false, default(T));
 
