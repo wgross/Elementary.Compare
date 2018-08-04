@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Elementary.Compare
+namespace Elementary.Compare.ReflectedHierarchy
 {
     public abstract class ReflectedHierarchyObjectNodeBase
     {
@@ -21,15 +21,17 @@ namespace Elementary.Compare
         /// </summary>
         protected object NodeValue => this.instance;
 
-        protected IEnumerable<PropertyInfo> ChildPropertyInfos => this.NodeValue.GetType().GetProperties();
+        protected IEnumerable<PropertyInfo> ChildPropertyInfos => this.NodeValue
+            .GetType()
+            .GetProperties()
+            .OrderBy(pi => pi.Name, StringComparer.OrdinalIgnoreCase);
 
         #region IHasChildNodes members
 
-        public bool HasChildNodes => this.ChildPropertyInfos.Any();
+        public bool HasChildNodes => this.ChildNodes.Any();
 
         public IEnumerable<IReflectedHierarchyNode> ChildNodes => this
             .ChildPropertyInfos
-            .OrderBy(pi => pi.Name, StringComparer.OrdinalIgnoreCase)
             .Select(pi => this.nodeFactory.Create(this.instance, pi))
             .Where(n => n != null);
 

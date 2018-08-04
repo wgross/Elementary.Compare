@@ -5,9 +5,9 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 
-namespace Elementary.Compare
+namespace Elementary.Compare.ReflectedHierarchy
 {
-    internal class ReflectedHierarchyEnumerableNode : ReflectedPropertyNodeBase, IReflectedHierarchyNode
+    public class ReflectedHierarchyEnumerableNode : ReflectedPropertyNodeBase, IReflectedHierarchyNode
     {
         public ReflectedHierarchyEnumerableNode(object instance, PropertyInfo propertyInfo, ReflectedHierarchyNodeFactory nodeFactory)
             : base(instance, propertyInfo, nodeFactory)
@@ -46,23 +46,5 @@ namespace Elementary.Compare
         }
 
         #endregion IHasIdentifiableChildNodes
-
-        #region IReflectedHierarchyNode members
-
-        public bool TrySetValue<T>(T value)
-        {
-            if (this.IsNotAssignable<T>())
-                return false;
-
-            this.propertyInfo.SetValue(this.instance, value);
-            return true;
-        }
-
-        public bool TrySetValue<T>(Func<T, T> generateNewValue)
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion IReflectedHierarchyNode members
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Elementary.Compare
+namespace Elementary.Compare.ReflectedHierarchy
 {
     /// <summary>
     /// An inner node of the refleceted hierrachy refers always to an instance and a property info.
@@ -42,19 +42,5 @@ namespace Elementary.Compare
         }
 
         #endregion IHasIdentifiableChildNode members
-
-        public bool TrySetValue<T>(T value)
-        {
-            if (this.IsNotAssignable<T>())
-                return false;
-
-            this.propertyInfo.SetValue(this.instance, value);
-            return true;
-        }
-
-        public bool TrySetValue<T>(Func<T, T> generateNewValue)
-        {
-            return this.TrySetValue(generateNewValue((T)this.NodeValue));
-        }
     }
 }
