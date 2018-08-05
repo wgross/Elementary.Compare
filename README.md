@@ -80,5 +80,5 @@ var obj = {
 };
 
 Assert.Equal(HierarchyPath.Create("a"), obj.PropertyPath(o => o.a));
-Assert.Equal(HierarchyPath.Create("b/0"), obj.PropertyPath(o => o.b[0]));
+Assert.Equal(HierarchyPath.Create("b","0"), obj.PropertyPath(o => o.b[0]));
 ```
