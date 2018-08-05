@@ -63,7 +63,7 @@ var result = obj1.DeepCompare(obj1);
 Assert.False(result.AreEqual)
 Assert.Equal(2, result.EqualValues.Count());
 Assert.Contains("a/b", result.RightLeafIsMissing); // obj2 is missing property obj1.a.b
-Assert.Contains("c/d", result.LeftLeafIsMissing); // obj2 is missing property obj2.c.d
+Assert.Contains("c/d", result.LeftLeafIsMissing); // obj1 is missing property obj2.c.d
 Assert.Contains("x/y", result.DifferentValues); // obj1 and obj2 have property .x.y, but values differ
 Assert.Contains("o/p", result.DifferentTypes); // obj1 and obj2 have property .o.p, but property types differ
 ```
