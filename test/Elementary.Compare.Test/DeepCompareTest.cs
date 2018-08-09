@@ -105,7 +105,7 @@ namespace Elementary.Compare.Test
         }
 
         [Fact]
-        public void Instances_not_equal_on_different_types()
+        public void Instances_not_equal_on_different_node_types()
         {
             // ARRANGE
 
@@ -128,6 +128,31 @@ namespace Elementary.Compare.Test
             Assert.False(result.AreEqual);
             Assert.Equal("a/0", result.LeftLeafIsMissing.Single());
             Assert.Equal("a", result.RightLeafIsMissing.Single());
+        }
+
+        [Fact]
+        public void Instances_not_equal_on_different_property_types()
+        {
+            // ARRANGE
+
+            var left = new
+            {
+                a = 1,
+            };
+
+            var right = new
+            {
+                a = "a"
+            };
+
+            // ACT
+
+            var result = left.DeepCompare(right);
+
+            // ASSERT
+
+            Assert.False(result.AreEqual);
+            Assert.Equal("a", result.DifferentTypes.Single());
         }
 
         [Fact]

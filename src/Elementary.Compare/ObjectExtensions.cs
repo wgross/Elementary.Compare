@@ -71,12 +71,21 @@ namespace Elementary.Compare
 
         public static DeepCompareResult DeepCompare(this object left, object right)
         {
-            // optimization removed: it desnfill the 'EqualValues' list
+            return left.DeepCompare(right.Flatten().ToDictionary(kv => kv.Key));
+        }
+
+        public static DeepCompareResult DeepCompare(this object left, IEnumerable<KeyValuePair<string, object>> right)
+        {
+            return left.DeepCompare(right.ToDictionary(kv => kv.Key));
+        }
+
+        private static DeepCompareResult DeepCompare(this object left, IDictionary<string, KeyValuePair<string, object>> rightLeaves)
+        {
+            // optimization removed: it doenst fill the 'EqualValues' list
             // if (ReferenceEquals(left, right))
             //     return new DeepCompareResult();
 
             var leftLeafEnumerator = left.Flatten().GetEnumerator();
-            var rightLeaves = right.Flatten().ToDictionary(kv => kv.Key);
             var compareResult = new DeepCompareResult();
 
             foreach (var leftLeaf in left.Flatten())

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace Elementary.Compare.Test
@@ -153,6 +154,30 @@ namespace Elementary.Compare.Test
             // ASSERT
 
             Assert.False(result);
+        }
+
+        [Fact]
+        public void Instance_is_not_equal_after_array_item_has_changed()
+        {
+            // ARRANGE
+
+            var left = new
+            {
+                a = new[] { "a" }
+            };
+
+            var checkpoint = left.Flatten().ToArray();
+
+            left.a[0] = "b";
+
+            // ACT
+
+            var result = left.DeepCompare(checkpoint);
+
+            // ASSERT
+
+            Assert.False(result.AreEqual);
+            Assert.Equal(left.PropertyPath(l => l.a[0]).ToString(), result.DifferentValues.Single());
         }
     }
 }
