@@ -28,7 +28,7 @@ Assert.Equal("a/b", result.Single().Key);
 Assert.Equal(1, result.Single().Value);
 ```
 
-To verify equality if two identically structured object trees.
+To verify equality of two identically structured object trees.
 
 ```C#
 using Elementary.Compare;
