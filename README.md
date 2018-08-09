@@ -1,6 +1,6 @@
 # Elementary.Compare
 
-Elementary compare applies the graph traversal agorithms from Elementary.Hierarchy to flatten and compare a deep .Net object tree using reflection.
+Elementary.Compare applies the graph traversal agorithms from Elementary.Hierarchy to flatten a .Net object tree along the C# properties of these objects to a stream of key value pairs where the key is the path to a leaf and the value of the leaf. Tis allows to compare two objects trees by value.
 
 ## Installation
 
