@@ -1,10 +1,16 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace Elementary.Compare.Test
 {
     public class DeepEqualsTest
     {
+        public class Changeable<T>
+        {
+            public T Data { get; set; }
+        }
+
         [Fact]
         public void Instances_are_equal()
         {
@@ -114,7 +120,7 @@ namespace Elementary.Compare.Test
 
             var left = new
             {
-                a = new[] { 1 },
+                a =  1,
             };
 
             var right = new
@@ -153,6 +159,102 @@ namespace Elementary.Compare.Test
             // ASSERT
 
             Assert.False(result);
+        }
+
+        [Fact]
+        public void Checkpoint_not_equal_after_array_item_has_changed()
+        {
+            // ARRANGE
+
+            var left = new Changeable<string[]>
+            {
+                Data = new[] { "a" }
+            };
+
+            var checkpoint = left.Flatten().ToArray();
+
+            left.Data[0] = "b";
+
+            // ACT
+
+            var result = left.DeepCompare(checkpoint);
+
+            // ASSERT
+
+            Assert.False(result.AreEqual);
+            Assert.Equal(left.PropertyPath(l => l.Data[0]).ToString(), result.DifferentValues.Single());
+        }
+
+        [Fact]
+        public void Checkpoint_not_equal_after_array_item_was_removed()
+        {
+            // ARRANGE
+
+            var left = new Changeable<string[]>
+            {
+                Data = new[] { "a" }
+            };
+
+            var checkpoint = left.Flatten().ToArray();
+
+            left.Data = new string[0];
+
+            // ACT
+
+            var result = left.DeepCompare(checkpoint);
+
+            // ASSERT
+
+            Assert.False(result.AreEqual);
+            Assert.Equal(left.PropertyPath(l => l.Data[0]).ToString(), result.RightLeafIsMissing.Single());
+        }
+
+        [Fact]
+        public void Checkpoint_not_equal_after_array_item_was_added()
+        {
+            // ARRANGE
+
+            var left = new Changeable<string[]>
+            {
+                Data = new[] { "a" }
+            };
+
+            var checkpoint = left.Flatten().ToArray();
+
+            left.Data = new[] { "a", "b" };
+
+            // ACT
+
+            var result = left.DeepCompare(checkpoint);
+
+            // ASSERT
+
+            Assert.False(result.AreEqual);
+            Assert.Equal(left.PropertyPath(l => l.Data[1]).ToString(), result.LeftLeafIsMissing.Single());
+        }
+
+        [Fact]
+        public void Checkpoint_not_equal_value_has_changed()
+        {
+            // ARRANGE
+
+            var left = new Changeable<string>
+            {
+                Data = "a"
+            };
+
+            var checkpoint = left.Flatten().ToArray();
+
+            left.Data = "b";
+
+            // ACT
+
+            var result = left.DeepCompare(checkpoint);
+
+            // ASSERT
+
+            Assert.False(result.AreEqual);
+            Assert.Equal(left.PropertyPath(l => l.Data).ToString(), result.DifferentValues.Single());
         }
     }
 }
