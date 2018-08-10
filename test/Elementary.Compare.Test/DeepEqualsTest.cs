@@ -120,7 +120,7 @@ namespace Elementary.Compare.Test
 
             var left = new
             {
-                a = new[] { 1 },
+                a =  1,
             };
 
             var right = new
