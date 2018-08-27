@@ -1,30 +1,30 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<!-- build -->
-	<PropertyGroup>
-		<TargetFramework>netstandard2.0</TargetFramework>
-	<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-	</PropertyGroup>
+  <!-- build -->
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
 
-	<!-- pack -->
-	<PropertyGroup>
-		<Description>Elementary Compare provides refelection base object comparision algorithms.</Description>
-		<Copyright>Copyright © 2018</Copyright>
-		<Authors>Wolfgang Gross</Authors>
-		<PackageId>Elementary.Compare</PackageId>
-		<PackageTags>reflection;compare;hierarchy</PackageTags>
-		<Version>0.0.1-alpha4</Version>
-		<PackageReleaseNotes>
-			0.0.1: first release for interface testing.
-		</PackageReleaseNotes>
-	<PackageLicenseUrl>https://raw.githubusercontent.com/wgross/Elementary.Compare/master/LICENSE</PackageLicenseUrl>
-		<RepositoryUrl>https://github.com/wgross/Elementary.Compare</RepositoryUrl>
-	<PackageProjectUrl>https://github.com/wgross/Elementary.Hierarchy</PackageProjectUrl>
-	</PropertyGroup>
-	
-	<!-- dependencies -->
-	<ItemGroup>
-		<PackageReference Include="Elementary.Hierarchy" Version="2.1.0" />
-	</ItemGroup>
-	
+  <!-- pack -->
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <Description>Elementary Compare provides refelection base object comparision algorithms.</Description>
+    <Copyright>Copyright © 2018</Copyright>
+    <Authors>Wolfgang Gross</Authors>
+    <PackageId>Elementary.Compare</PackageId>
+    <PackageTags>reflection;compare;hierarchy</PackageTags>
+    <Version>0.0.1-alpha4</Version>
+    <PackageReleaseNotes>
+      0.0.1: first release for interface testing.
+    </PackageReleaseNotes>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/wgross/Elementary.Compare/master/LICENSE</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/wgross/Elementary.Compare</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/wgross/Elementary.Hierarchy</PackageProjectUrl>
+  </PropertyGroup>
+
+  <!-- dependencies -->
+  <ItemGroup>
+    <PackageReference Include="Elementary.Hierarchy" Version="2.1.0" />
+  </ItemGroup>
 </Project>
