@@ -1,21 +1,22 @@
-﻿namespace Elementary.Compare.ReflectedHierarchy
+﻿using System;
+
+namespace Elementary.Compare.ReflectedHierarchy
 {
     public abstract class ReflectedHierarchyNodeBase
     {
         protected readonly IReflectedHierarchyNodeFactory nodeFactory;
-        private readonly IReflectedHierarchyNodeFlyweight state;
 
         public ReflectedHierarchyNodeBase(IReflectedHierarchyNodeFactory nodeFactory, IReflectedHierarchyNodeFlyweight state)
         {
             this.nodeFactory = nodeFactory;
-            this.state = state;
+            this.State = state;
         }
 
-        protected IReflectedHierarchyNodeFlyweight State => this.state;
+        protected IReflectedHierarchyNodeFlyweight State { get; }
 
         #region IReflectedHierarchyNode members
 
-        public string Id => this.state.Id;
+        public string Id => this.State.Id;
 
         /// <summary>
         /// The valu eof the root node is the object is wraps
@@ -30,6 +31,8 @@
 
             return (true, (T)nodeValue);
         }
+
+        public Type ValueType => this.State.NodeValueType;
 
         #endregion IReflectedHierarchyNode members
     }

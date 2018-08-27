@@ -1,4 +1,5 @@
 ﻿using Elementary.Compare.ReflectedHierarchy;
+using Elementary.Hierarchy;
 using System;
 using Xunit;
 
@@ -114,6 +115,25 @@ namespace Elementary.Compare.Test.ReflectedHierarchy
             // ASSERT
 
             Assert.False(result);
+        }
+
+        [Fact]
+        public void PropertyNode_ValueType_provides_properties_raw_type()
+        {
+            // ARRANGE
+
+            var node = ReflectedHierarchyFactory
+                .Create(new { a = 1 })
+                .DescendantAt(HierarchyPath.Create("a"));
+
+            // ACT
+
+            var result = node.ValueType;
+
+            // ASSERT
+
+            Assert.IsType<ReflectedHierarchyPropertyNode>(node);
+            Assert.Equal(typeof(int), result);
         }
     }
 }
