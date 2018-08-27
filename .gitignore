@@ -6,3 +6,7 @@
 **/Debug
 **/Release
 **/obj
+/.coverageresults
+/.msbuildresults
+/.testresults
+/.vs/config
