@@ -120,7 +120,7 @@ namespace Elementary.Compare.Test
 
             var left = new
             {
-                a =  1,
+                a = 1,
             };
 
             var right = new
@@ -206,7 +206,7 @@ namespace Elementary.Compare.Test
             // ASSERT
 
             Assert.False(result.AreEqual);
-            Assert.Equal(left.PropertyPath(l => l.Data[0]).ToString(), result.RightLeafIsMissing.Single());
+            Assert.Equal(left.PropertyPath(l => l.Data[0]).ToString(), result.RightLeavesMissedAtLeftSide.Single());
         }
 
         [Fact]
@@ -230,11 +230,11 @@ namespace Elementary.Compare.Test
             // ASSERT
 
             Assert.False(result.AreEqual);
-            Assert.Equal(left.PropertyPath(l => l.Data[1]).ToString(), result.LeftLeafIsMissing.Single());
+            Assert.Equal(left.PropertyPath(l => l.Data[1]).ToString(), result.LeftLeavesMissedAtRightSide.Single());
         }
 
         [Fact]
-        public void Checkpoint_not_equal_value_has_changed()
+        public void Checkpoint_not_equal_after_value_has_changed()
         {
             // ARRANGE
 

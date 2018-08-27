@@ -98,14 +98,14 @@ namespace Elementary.Compare
                 }
                 else
                 {
-                    compareResult.LeftLeafIsMissing.Add(leftLeaf.Key);
+                    compareResult.LeftLeavesMissedAtRightSide.Add(leftLeaf.Key);
                 }
             }
 
             // add all uncompared left proerties to the result object
             return rightLeaves.Aggregate(compareResult, (cr, kv) =>
             {
-                cr.RightLeafIsMissing.Add(kv.Key);
+                cr.RightLeavesMissedAtLeftSide.Add(kv.Key);
                 return cr;
             });
         }

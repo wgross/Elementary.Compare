@@ -6,7 +6,7 @@ namespace Elementary.Compare.Test
     public class DeepCompareTest
     {
         [Fact]
-        public void Instances_are_equal()
+        public void DeepCompare_equal_instances()
         {
             // ARRANGE
 
@@ -32,7 +32,7 @@ namespace Elementary.Compare.Test
         }
 
         [Fact]
-        public void Instances_are_equal_for_same_instances()
+        public void DeepCompare_same_instance()
         {
             // ARRANGE
 
@@ -52,86 +52,36 @@ namespace Elementary.Compare.Test
         }
 
         [Fact]
-        public void Instances_not_equal_on_additional_property()
+        public void DeepCompare_finds_additional_property()
         {
             // ARRANGE
 
-            var left = new
+            var obj1 = new
             {
                 a = "a",
                 b = "b"
             };
 
-            var right = new
+            var obj2 = new
             {
                 a = "a"
             };
 
             // ACT
 
-            var result1 = left.DeepCompare(right);
-            var result2 = right.DeepCompare(left);
+            var result1 = obj1.DeepCompare(obj2);
+            var result2 = obj2.DeepCompare(obj1);
 
             // ASSERT
 
             Assert.False(result1.AreEqual);
             Assert.False(result2.AreEqual);
+            Assert.Equal("b", result1.LeftLeavesMissedAtRightSide.Single());
+            Assert.Equal("b", result2.RightLeavesMissedAtLeftSide.Single());
         }
 
         [Fact]
-        public void Instances_not_equal_on_different_pathes()
-        {
-            // ARRANGE
-
-            var left = new
-            {
-                b = "a",
-            };
-
-            var right = new
-            {
-                a = "a"
-            };
-
-            // ACT
-
-            var result = left.DeepCompare(right);
-
-            // ASSERT
-
-            Assert.False(result.AreEqual);
-            Assert.Equal("a", result.RightLeafIsMissing.Single());
-            Assert.Equal("b", result.LeftLeafIsMissing.Single());
-        }
-
-        [Fact]
-        public void Instances_not_equal_on_different_node_types()
-        {
-            // ARRANGE
-
-            var left = new
-            {
-                a = new[] { 1 },
-            };
-
-            var right = new
-            {
-                a = "a"
-            };
-
-            // ACT
-
-            var result = left.DeepCompare(right);
-
-            // ASSERT
-
-            Assert.False(result.AreEqual);
-            Assert.Equal("a/0", result.LeftLeafIsMissing.Single());
-            Assert.Equal("a", result.RightLeafIsMissing.Single());
-        }
-
-        [Fact]
-        public void Instances_not_equal_on_different_property_types()
+        public void DeepCompare_finds_different_property_types()
         {
             // ARRANGE
 
@@ -156,18 +106,18 @@ namespace Elementary.Compare.Test
         }
 
         [Fact]
-        public void Instances_not_equal_on_different_values()
+        public void DeepCompare_finds_different_enumerable_items()
         {
             // ARRANGE
 
             var left = new
             {
-                a = "b",
+                a = new[] { 1 },
             };
 
             var right = new
             {
-                a = "a"
+                a = new[] { 2 },
             };
 
             // ACT
@@ -177,32 +127,60 @@ namespace Elementary.Compare.Test
             // ASSERT
 
             Assert.False(result.AreEqual);
-            Assert.Equal("a", result.DifferentValues.Single());
+            Assert.Equal("a/0", result.DifferentValues.Single());
         }
 
         [Fact]
-        public void Instances_not_equal_on_different_values_null()
+        public void DeepCompare_finds_additional_enumerable_items()
         {
             // ARRANGE
 
             var left = new
             {
-                a = "b",
+                a = new[] { 1 },
             };
 
             var right = new
             {
-                a = (string)null
+                a = new[] { 1, 2 },
             };
 
             // ACT
 
-            var result = left.DeepCompare(right);
+            var result1 = left.DeepCompare(right);
+            var result2 = right.DeepCompare(left);
 
             // ASSERT
 
-            Assert.False(result.AreEqual);
-            Assert.Equal("a", result.DifferentValues.Single());
+            Assert.False(result1.AreEqual);
+            Assert.False(result2.AreEqual);
+            Assert.Equal("a/1", result1.RightLeavesMissedAtLeftSide.Single());
+            Assert.Equal("a/1", result2.LeftLeavesMissedAtRightSide.Single());
+        }
+
+        [Fact]
+        public void DeepCompare_finds_enumerable_items_having_different_types()
+        {
+            // ARRANGE
+
+            var left = new
+            {
+                a = new int[] { 1 },
+            };
+
+            var right = new
+            {
+                a = new long[] { 1 },
+            };
+
+            // ACT
+
+            var result1 = left.DeepCompare(right);
+
+            // ASSERT
+
+            Assert.False(result1.AreEqual);
+            Assert.Equal("a/0", result1.DifferentTypes.Single());
         }
     }
 }
