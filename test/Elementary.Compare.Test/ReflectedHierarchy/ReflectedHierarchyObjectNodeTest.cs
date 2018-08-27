@@ -77,7 +77,8 @@ namespace Elementary.Compare.Test.ReflectedHierarchy
 
             // ASSERT
 
-            Assert.IsType<ReflectedHierarchyObjectNode>(node);
+            Assert.IsType<ReflectedHierarchyObjectRootNode>(node);
+            Assert.IsAssignableFrom<ReflectedHierarchyObjectNodeBase>(node);
             Assert.Equal(typeof(int), result);
         }
     }
