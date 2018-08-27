@@ -60,7 +60,25 @@ namespace Elementary.Compare.Test.ReflectedHierarchy
 
             // ASSERT
 
+            Assert.IsType<ReflectedHierarchyObjectNode>(node);
             Assert.False(result);
+        }
+
+        [Fact]
+        public void ObjectNode_ValueType_provides_properties_raw_type()
+        {
+            // ARRANGE
+
+            var node = ReflectedHierarchyFactory.Create(1);
+
+            // ACT
+
+            var result = node.ValueType;
+
+            // ASSERT
+
+            Assert.IsType<ReflectedHierarchyObjectNode>(node);
+            Assert.Equal(typeof(int), result);
         }
     }
 }
