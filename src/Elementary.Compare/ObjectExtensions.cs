@@ -173,7 +173,7 @@ namespace Elementary.Compare
                 var (hasValue, value) = node.TryGetValue<object>();
                 if (!hasValue)
                     return false;
-                if (value == null)
+                if (value is null)
                     return false;
                 if (node.ValueType.IsValueType)
                     if (Activator.CreateInstance(node.ValueType).Equals(value))

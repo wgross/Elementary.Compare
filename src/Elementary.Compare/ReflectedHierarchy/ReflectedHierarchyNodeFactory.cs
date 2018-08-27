@@ -8,7 +8,7 @@ namespace Elementary.Compare.ReflectedHierarchy
     {
         public virtual IReflectedHierarchyNode Create(object instance, PropertyInfo property)
         {
-            if (instance == null)
+            if (instance is null)
                 return null;
 
             var instanceType = instance.GetType();
