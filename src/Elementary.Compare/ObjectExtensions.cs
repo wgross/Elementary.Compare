@@ -171,11 +171,8 @@ namespace Elementary.Compare
             var h = ReflectedHierarchy.ReflectedHierarchyFactory.Create(root, new ReflectedHierarchyNodeFactory());
             foreach (var node in h.DescendantsAndSelf())
             {
-                var (hasValue, value) = node.TryGetValue<object>();
-
-                // having no value is rejected
-                if (!hasValue)
-                    return false;
+                // a cast to object must never fail
+                var (_, value) = node.TryGetValue<object>();
 
                 // having a value of 'null' (ref type) is rejected
                 if (value is null)
