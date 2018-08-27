@@ -149,5 +149,28 @@ namespace Elementary.Compare
 
             yield break;
         }
+
+        /// <summary>
+        /// Verifies if all properties of the given object have value != default(T). This is useful to
+        /// check it test object is not completely filled with data.
+        /// </summary>
+        /// <param name="root"></param>
+        /// <returns></returns>
+        public static bool NoPropertyHasDefaultValue(this object root)
+        {
+            var h = ReflectedHierarchy.ReflectedHierarchyFactory.Create(root, new ReflectedHierarchyNodeFactory());
+            foreach (var node in h.DescendantsAndSelf())
+            {
+                var (hasValue, value) = node.TryGetValue<object>();
+                if (!hasValue)
+                    return false;
+                if (value == null)
+                    return false;
+                if (node.ValueType.IsValueType)
+                    if (Activator.CreateInstance(node.ValueType).Equals(value))
+                        return false;
+            }
+            return true;
+        }
     }
 }

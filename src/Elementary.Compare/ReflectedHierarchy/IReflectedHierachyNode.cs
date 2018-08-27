@@ -1,4 +1,5 @@
 ﻿using Elementary.Hierarchy;
+using System;
 
 namespace Elementary.Compare.ReflectedHierarchy
 {
@@ -7,5 +8,7 @@ namespace Elementary.Compare.ReflectedHierarchy
         string Id { get; }
 
         (bool, T) TryGetValue<T>();
+
+        Type ValueType {  get; }
     }
 }

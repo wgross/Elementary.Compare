@@ -555,7 +555,7 @@ namespace Elementary.Compare.Test.ReflectedHierarchy
         {
             // ARRANGE
 
-            var obj = new { property = (int?) null };
+            var obj = new { property = (int?)null };
             var hierarchyNode = ReflectedHierarchyFactory.Create(obj);
 
             // ACT
@@ -765,7 +765,7 @@ namespace Elementary.Compare.Test.ReflectedHierarchy
 
         #endregion TryGet value from node
 
-        #region Taverse the hierachy
+        #region Taverse the hierarchy
 
         [Fact]
         public void Object_without_properties_hasnt_descendants()
@@ -842,6 +842,46 @@ namespace Elementary.Compare.Test.ReflectedHierarchy
             Assert.Equal(2, result.Count());
         }
 
-        #endregion Taverse the hierachy
+        #endregion Taverse the hierarchy
+
+        #region Access properties raw type
+
+        [Fact]
+        public void ReflectedHierarchyObjectNodeBase_ValueType_provides_properties_raw_type()
+        {
+            // ARRANGE
+
+            var hierarchyNode = ReflectedHierarchyFactory.Create(1);
+
+            // ACT
+
+            var result = hierarchyNode.ValueType;
+
+            // ASSERT
+
+            Assert.IsAssignableFrom<ReflectedHierarchyObjectNodeBase>(hierarchyNode);
+            Assert.Equal(typeof(int), result);
+        }
+
+        [Fact]
+        public void ReflectedPropertyNodeBase_ValueType_provides_properties_raw_type()
+        {
+            // ARRANGE
+
+            var hierarchyNode = ReflectedHierarchyFactory
+                .Create(new { a = 1 })
+                .DescendantAt(HierarchyPath.Create("a"));
+
+            // ACT
+
+            var result = hierarchyNode.ValueType;
+
+            // ASSERT
+
+            Assert.IsAssignableFrom<ReflectedPropertyNodeBase>(hierarchyNode);
+            Assert.Equal(typeof(int), result);
+        }
+
+        #endregion Access properties raw type
     }
 }

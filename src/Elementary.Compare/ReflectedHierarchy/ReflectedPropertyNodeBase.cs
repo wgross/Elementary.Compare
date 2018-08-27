@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -38,11 +39,16 @@ namespace Elementary.Compare.ReflectedHierarchy
                 if (!typeof(T).IsAssignableFrom(nodeValue.GetType()))
                     return (false, default(T));
             }
-            else if (!typeof(T).IsAssignableFrom(this.propertyInfo.PropertyType))
-               return (false, default(T));
+            else if (!typeof(T).IsAssignableFrom(this.ValueType))
+                return (false, default(T));
 
             return (true, (T)nodeValue);
         }
+
+        /// <summary>
+        /// for all property nodes the ValueType is the property type
+        /// </summary>
+        public Type ValueType => this.propertyInfo.PropertyType;
 
         #endregion IReflectedHierarchyNode members
     }

@@ -52,7 +52,7 @@ namespace Elementary.Compare.ReflectedHierarchy
         #region IReflectedHierarchyNode members
 
         /// <summary>
-        /// The valu eof the root node is the object is wraps
+        /// The value of the root node is the object is wraps
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -64,6 +64,11 @@ namespace Elementary.Compare.ReflectedHierarchy
 
             return (true, (T)nodeValue);
         }
+
+        /// <summary>
+        /// for all object nodes the ValueType is the object instances type
+        /// </summary>
+        public Type ValueType => this.NodeValue.GetType();
 
         #endregion IReflectedHierarchyNode members
     }
