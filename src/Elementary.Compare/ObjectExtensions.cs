@@ -2,6 +2,7 @@
 using Elementary.Hierarchy;
 using Elementary.Hierarchy.Generic;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -171,12 +172,25 @@ namespace Elementary.Compare
             foreach (var node in h.DescendantsAndSelf())
             {
                 var (hasValue, value) = node.TryGetValue<object>();
+
+                // having no value is rejected
                 if (!hasValue)
                     return false;
+
+                // having a value of 'null' (ref type) is rejected
                 if (value is null)
                     return false;
-                if (node.ValueType.IsValueType)
+
+                var valueType = node.ValueType;
+
+                // a value type having its default value is rejected
+                if (valueType.IsValueType)
                     if (Activator.CreateInstance(node.ValueType).Equals(value))
+                        return false;
+
+                // an enumerable type without elements is rejected
+                if (valueType.GetInterface(typeof(IEnumerable).Name) != null)
+                    if (!((IEnumerable)value).GetEnumerator().MoveNext())
                         return false;
             }
             return true;
