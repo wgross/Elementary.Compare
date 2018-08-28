@@ -24,6 +24,7 @@
       0.0.1: first release for interface testing.
     </PackageReleaseNotes>
     <PackageLicenseUrl>https://raw.githubusercontent.com/wgross/Elementary.Compare/master/LICENSE</PackageLicenseUrl>
+    <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/wgross/Elementary.Compare</RepositoryUrl>
     <PackageProjectUrl>https://github.com/wgross/Elementary.Hierarchy</PackageProjectUrl>
   </PropertyGroup>
