@@ -4,6 +4,11 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <!-- source link-->
+    <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>false</EmbedUntrackedSources>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 
   <!-- pack -->
@@ -14,7 +19,7 @@
     <Authors>Wolfgang Gross</Authors>
     <PackageId>Elementary.Compare</PackageId>
     <PackageTags>reflection;compare;hierarchy</PackageTags>
-    <Version>0.0.1-alpha4</Version>
+    <Version>0.0.1-alpha5</Version>
     <PackageReleaseNotes>
       0.0.1: first release for interface testing.
     </PackageReleaseNotes>
@@ -26,5 +31,11 @@
   <!-- dependencies -->
   <ItemGroup>
     <PackageReference Include="Elementary.Hierarchy" Version="2.1.0" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-63127-02">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <!--source link-->
   </ItemGroup>
+  
 </Project>
