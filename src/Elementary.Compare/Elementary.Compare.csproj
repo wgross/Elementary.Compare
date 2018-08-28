@@ -14,7 +14,7 @@
   <!-- pack -->
   <PropertyGroup>
     <IsPackable>true</IsPackable>
-    <Description>Elementary Compare provides refelection base object comparision algorithms.</Description>
+    <Description>Elementary Compare provides reflection based object comparision algorithms.</Description>
     <Copyright>Copyright © 2018</Copyright>
     <Authors>Wolfgang Gross</Authors>
     <PackageId>Elementary.Compare</PackageId>
@@ -36,7 +36,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <!--source link-->
   </ItemGroup>
   
 </Project>

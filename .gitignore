@@ -10,3 +10,4 @@
 /.msbuildresults
 /.testresults
 /.vs/config
+/test/Elementary.Compare.Nuget.Test
