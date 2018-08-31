@@ -9,6 +9,6 @@ namespace Elementary.Compare.ReflectedHierarchy
 
         (bool, T) TryGetValue<T>();
 
-        Type ValueType {  get; }
+        Type ValueType { get; }
     }
 }

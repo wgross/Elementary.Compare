@@ -76,7 +76,6 @@ namespace Elementary.Compare.Test.ReflectedHierarchy
             var value = new List<int> { 1 };
             var node = ReflectedHierarchyFactory.Create(value);
 
-
             // ACT
 
             var (result, _) = node.TryGetChildNode("not int");
@@ -93,7 +92,6 @@ namespace Elementary.Compare.Test.ReflectedHierarchy
 
             var value = new List<int> { 1 };
             var node = ReflectedHierarchyFactory.Create(value);
-
 
             // ACT
 

@@ -62,7 +62,7 @@ namespace Elementary.Compare.Test.ReflectedHierarchy
 
             // ACT
 
-            var (result,_) = node.TryGetChildNode("1");
+            var (result, _) = node.TryGetChildNode("1");
 
             // ASSERT
 

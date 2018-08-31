@@ -5,6 +5,5 @@
         public ReflectedHierarchyObjectRootNode(object instance, IReflectedHierarchyNodeFactory nodeFactory)
             : base(nodeFactory, new ReflectedHierarchyInstanceNodeFlyweight(instance, string.Empty))
         { }
-
     }
 }

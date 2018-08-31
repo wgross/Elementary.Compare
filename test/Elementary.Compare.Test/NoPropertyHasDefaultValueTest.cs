@@ -84,7 +84,6 @@ namespace Elementary.Compare.Test
             Assert.False(result);
         }
 
-
         [Fact]
         public void NoPropertyHasDefaultValue_rejects_nullable_value_with_default_value()
         {
