@@ -182,7 +182,7 @@ namespace Elementary.Compare.Test
             // ASSERT
 
             Assert.False(result.AreEqual);
-            Assert.Equal(left.PropertyPath(l => l.Data[0]).ToString(), result.DifferentValues.Single());
+            Assert.Equal(left.PropertyPath(l => l.Data[0]).ToString(), result.Different.Values.Single());
         }
 
         [Fact]
@@ -206,7 +206,7 @@ namespace Elementary.Compare.Test
             // ASSERT
 
             Assert.False(result.AreEqual);
-            Assert.Equal(left.PropertyPath(l => l.Data[0]).ToString(), result.RightLeavesMissedAtLeftSide.Single());
+            Assert.Equal(left.PropertyPath(l => l.Data[0]).ToString(), result.Missing.Left.Single());
         }
 
         [Fact]
@@ -230,7 +230,7 @@ namespace Elementary.Compare.Test
             // ASSERT
 
             Assert.False(result.AreEqual);
-            Assert.Equal(left.PropertyPath(l => l.Data[1]).ToString(), result.LeftLeavesMissedAtRightSide.Single());
+            Assert.Equal(left.PropertyPath(l => l.Data[1]).ToString(), result.Missing.Right.Single());
         }
 
         [Fact]
@@ -254,7 +254,7 @@ namespace Elementary.Compare.Test
             // ASSERT
 
             Assert.False(result.AreEqual);
-            Assert.Equal(left.PropertyPath(l => l.Data).ToString(), result.DifferentValues.Single());
+            Assert.Equal(left.PropertyPath(l => l.Data).ToString(), result.Different.Values.Single());
         }
     }
 }

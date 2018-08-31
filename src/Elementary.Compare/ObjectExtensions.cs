@@ -98,14 +98,14 @@ namespace Elementary.Compare
                 }
                 else
                 {
-                    compareResult.LeftLeavesMissedAtRightSide.Add(leftLeaf.Key);
+                    compareResult.Missing.Right.Add(leftLeaf.Key);
                 }
             }
 
             // add all uncompared left proerties to the result object
             return rightLeaves.Aggregate(compareResult, (cr, kv) =>
             {
-                cr.RightLeavesMissedAtLeftSide.Add(kv.Key);
+                cr.Missing.Left.Add(kv.Key);
                 return cr;
             });
         }
@@ -113,10 +113,10 @@ namespace Elementary.Compare
         private static void DeepCompareLeaves(KeyValuePair<string, object> leftLeaf, KeyValuePair<string, object> rightLeaf, DeepCompareResult compareResult)
         {
             if (!EqualityComparer<Type>.Default.Equals(GetTypeOfValueSafe(leftLeaf.Value), GetTypeOfValueSafe(rightLeaf.Value)))
-                compareResult.DifferentTypes.Add(leftLeaf.Key);
+                compareResult.Different.Types.Add(leftLeaf.Key);
 
             if (!EqualityComparer<object>.Default.Equals(leftLeaf.Value, rightLeaf.Value))
-                compareResult.DifferentValues.Add(leftLeaf.Key);
+                compareResult.Different.Values.Add(leftLeaf.Key);
 
             compareResult.EqualValues.Add(leftLeaf.Key);
         }

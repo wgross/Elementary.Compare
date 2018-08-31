@@ -76,8 +76,8 @@ namespace Elementary.Compare.Test
 
             Assert.False(result1.AreEqual);
             Assert.False(result2.AreEqual);
-            Assert.Equal("b", result1.LeftLeavesMissedAtRightSide.Single());
-            Assert.Equal("b", result2.RightLeavesMissedAtLeftSide.Single());
+            Assert.Equal("b", result1.Missing.Right.Single());
+            Assert.Equal("b", result2.Missing.Left.Single());
         }
 
         [Fact]
@@ -102,7 +102,7 @@ namespace Elementary.Compare.Test
             // ASSERT
 
             Assert.False(result.AreEqual);
-            Assert.Equal("a", result.DifferentTypes.Single());
+            Assert.Equal("a", result.Different.Types.Single());
         }
 
         [Fact]
@@ -127,7 +127,7 @@ namespace Elementary.Compare.Test
             // ASSERT
 
             Assert.False(result.AreEqual);
-            Assert.Equal("a/0", result.DifferentValues.Single());
+            Assert.Equal("a/0", result.Different.Values.Single());
         }
 
         [Fact]
@@ -154,8 +154,8 @@ namespace Elementary.Compare.Test
 
             Assert.False(result1.AreEqual);
             Assert.False(result2.AreEqual);
-            Assert.Equal("a/1", result1.RightLeavesMissedAtLeftSide.Single());
-            Assert.Equal("a/1", result2.LeftLeavesMissedAtRightSide.Single());
+            Assert.Equal("a/1", result1.Missing.Left.Single());
+            Assert.Equal("a/1", result2.Missing.Right.Single());
         }
 
         [Fact]
@@ -180,7 +180,7 @@ namespace Elementary.Compare.Test
             // ASSERT
 
             Assert.False(result1.AreEqual);
-            Assert.Equal("a/0", result1.DifferentTypes.Single());
+            Assert.Equal("a/0", result1.Different.Types.Single());
         }
     }
 }

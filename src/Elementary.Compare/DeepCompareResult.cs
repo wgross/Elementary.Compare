@@ -5,15 +5,31 @@ namespace Elementary.Compare
 {
     public class DeepCompareResult
     {
-        public bool AreEqual => !(this.DifferentValues.Any() || this.DifferentTypes.Any() || this.LeftLeavesMissedAtRightSide.Any() || this.RightLeavesMissedAtLeftSide.Any());
+        public class Differences
+        {
+            public bool Any() => this.Values.Any() || this.Types.Any();
 
-        public IList<string> DifferentValues { get; } = new List<string>();
+            public IList<string> Values { get; } = new List<string>();
 
-        public IList<string> DifferentTypes { get; } = new List<string>();
+            public IList<string> Types { get; } = new List<string>();
+        }
 
-        public IList<string> LeftLeavesMissedAtRightSide { get; } = new List<string>();
+        public class Missings
+        {
+            public bool Any() => this.Left.Any() || this.Right.Any();
 
-        public IList<string> RightLeavesMissedAtLeftSide { get; } = new List<string>();
+            public IList<string> Left { get; } = new List<string>();
+
+            public IList<string> Right { get; } = new List<string>();
+        }
+
+        public bool AreEqual => !(this.Different.Any() || this.Missing.Any());
+
+        public Differences Different { get; } = new Differences();
+
+        public Missings Missing { get; } = new Missings();
+
+        // public IList<string> RightLeavesMissedAtLeftSide { get; } = new List<string>();
 
         public IList<string> EqualValues { get; } = new List<string>();
     }
