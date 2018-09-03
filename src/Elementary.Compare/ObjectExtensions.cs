@@ -2,6 +2,7 @@
 using Elementary.Hierarchy;
 using Elementary.Hierarchy.Generic;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -97,14 +98,14 @@ namespace Elementary.Compare
                 }
                 else
                 {
-                    compareResult.LeftLeafIsMissing.Add(leftLeaf.Key);
+                    compareResult.Missing.Right.Add(leftLeaf.Key);
                 }
             }
 
             // add all uncompared left proerties to the result object
             return rightLeaves.Aggregate(compareResult, (cr, kv) =>
             {
-                cr.RightLeafIsMissing.Add(kv.Key);
+                cr.Missing.Left.Add(kv.Key);
                 return cr;
             });
         }
@@ -112,10 +113,10 @@ namespace Elementary.Compare
         private static void DeepCompareLeaves(KeyValuePair<string, object> leftLeaf, KeyValuePair<string, object> rightLeaf, DeepCompareResult compareResult)
         {
             if (!EqualityComparer<Type>.Default.Equals(GetTypeOfValueSafe(leftLeaf.Value), GetTypeOfValueSafe(rightLeaf.Value)))
-                compareResult.DifferentTypes.Add(leftLeaf.Key);
+                compareResult.Different.Types.Add(leftLeaf.Key);
 
             if (!EqualityComparer<object>.Default.Equals(leftLeaf.Value, rightLeaf.Value))
-                compareResult.DifferentValues.Add(leftLeaf.Key);
+                compareResult.Different.Values.Add(leftLeaf.Key);
 
             compareResult.EqualValues.Add(leftLeaf.Key);
         }
@@ -157,6 +158,39 @@ namespace Elementary.Compare
             }
 
             yield break;
+        }
+
+        /// <summary>
+        /// Verifies if all properties of the given object have value != default(T). This is useful to
+        /// check it test object is not completely filled with data.
+        /// </summary>
+        /// <param name="root"></param>
+        /// <returns></returns>
+        public static bool NoPropertyHasDefaultValue(this object root)
+        {
+            var h = ReflectedHierarchy.ReflectedHierarchyFactory.Create(root, new ReflectedHierarchyNodeFactory());
+            foreach (var node in h.DescendantsAndSelf())
+            {
+                // a cast to object must never fail
+                var (_, value) = node.TryGetValue<object>();
+
+                // having a value of 'null' (ref type) is rejected
+                if (value is null)
+                    return false;
+
+                var valueType = node.ValueType;
+
+                // a value type having its default value is rejected
+                if (valueType.IsValueType)
+                    if (Activator.CreateInstance(node.ValueType).Equals(value))
+                        return false;
+
+                // an enumerable type without elements is rejected
+                if (valueType.GetInterface(typeof(IEnumerable).Name) != null)
+                    if (!((IEnumerable)value).GetEnumerator().MoveNext())
+                        return false;
+            }
+            return true;
         }
     }
 }

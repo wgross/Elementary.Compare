@@ -1,0 +1,13 @@
+﻿################################################################################
+# Diese .gitignore-Datei wurde von Microsoft(R) Visual Studio automatisch erstellt.
+################################################################################
+
+/.vs/Elementary.Compare
+**/Debug
+**/Release
+**/obj
+/.coverageresults
+/.msbuildresults
+/.testresults
+/.vs/config
+/test/Elementary.Compare.Nuget.Test

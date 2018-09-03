@@ -46,7 +46,6 @@ namespace Elementary.Compare.Test.ReflectedHierarchy
             Assert.Empty(node.ChildNodes);
         }
 
-
         [Fact]
         public void RootObjectNode_returns_false_on_invalid_value_type()
         {

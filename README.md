@@ -33,15 +33,15 @@ To verify equality of two identically structured object trees.
 ```C#
 using Elementary.Compare;
 
-var obj1 = new {
+var left = new {
   ...
 };
 
-var obj2 = new {
+var right = new {
   ...
 };
 
-Assert.True(obj1.DeepEquals(obj2));
+Assert.True(left.DeepEquals(right));
 ```
 
 To compare to instance of object trees and get a report of their differences and equalities:
@@ -50,22 +50,22 @@ To compare to instance of object trees and get a report of their differences and
 
 using Elementary.Compare;
 
-var obj1 = new {
+var left = new {
   ...
 };
 
-var obj2 = new {
+var right = new {
   ...
 };
 
-var result = obj1.DeepCompare(obj1);
+var result = left.DeepCompare(left);
 
 Assert.False(result.AreEqual)
 Assert.Equal(2, result.EqualValues.Count());
-Assert.Contains("a/b", result.RightLeafIsMissing); // obj2 is missing property obj1.a.b
-Assert.Contains("c/d", result.LeftLeafIsMissing); // obj1 is missing property obj2.c.d
-Assert.Contains("x/y", result.DifferentValues); // obj1 and obj2 have property .x.y, but values differ
-Assert.Contains("o/p", result.DifferentTypes); // obj1 and obj2 have property .o.p, but property types differ
+Assert.Contains("a/b", result.Missing.Right); // right is missing property left.a.b
+Assert.Contains("c/d", result.Missing.Left); // left is missing property right.c.d
+Assert.Contains("x/y", result.Different.Values); // left and right have property .x.y, but values differ
+Assert.Contains("o/p", result.Different.Types); // left and right have property .o.p, but property types differ
 ```
 
 To create property pathes in a refactorable way:
