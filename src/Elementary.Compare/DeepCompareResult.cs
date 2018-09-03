@@ -1,22 +1,29 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Elementary.Compare
 {
     public class DeepCompareResult
     {
-        public class Differences
+        public class Differences : IEnumerable<string>
         {
             public bool Any() => this.Values.Any() || this.Types.Any();
+
+            public IEnumerator<string> GetEnumerator() => this.Values.Union(this.Types).GetEnumerator();
+
+            IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
 
             public IList<string> Values { get; } = new List<string>();
 
             public IList<string> Types { get; } = new List<string>();
         }
 
-        public class Missings
+        public class Missings : IEnumerable<string>
         {
-            public bool Any() => this.Left.Any() || this.Right.Any();
+            public IEnumerator<string> GetEnumerator() => this.Right.Union(this.Left).GetEnumerator();
+
+            IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
 
             public IList<string> Left { get; } = new List<string>();
 
