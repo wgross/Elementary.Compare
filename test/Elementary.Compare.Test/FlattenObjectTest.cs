@@ -142,5 +142,23 @@ namespace Elementary.Compare.Test
             Assert.Contains("maxDepth='10'", result.Message);
             Assert.Contains("path='child/child/child/child/child/child/child/child/child/child'", result.Message);
         }
+
+        [Fact]
+        public void Create_flat_map_without_cycles()
+        {
+            // ARRANGE
+
+            var obj1 = new CycleTestClass();
+            var obj2 = new CycleTestClass { child = obj1 };
+
+            // ACT
+
+            var result = new Dictionary<string, object>(obj1.Flatten(maxDepth: 10));
+
+            // ASSERT
+
+            Assert.Single(result);
+            Assert.Equal("child", result.Single().Key);
+        }
     }
 }
