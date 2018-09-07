@@ -35,9 +35,5 @@ namespace Elementary.Compare.ReflectedHierarchy
         public Type ValueType => this.State.NodeValueType;
 
         #endregion IReflectedHierarchyNode members
-
-        public override bool Equals(object obj) => this.State.Equals(((ReflectedHierarchyNodeBase)obj).State);
-
-        public override int GetHashCode() => this.State.GetHashCode();
     }
 }
