@@ -22,7 +22,8 @@ namespace Elementary.Compare.Test
                 b = 1,
                 c = new[] { 1, 2 },
                 d = new List<int> { 1, 2 },
-                e = new List<int> { 1, 2 }
+                e = new List<int> { 1, 2 },
+                f = new List<int>()
             };
 
             var right = new
@@ -31,7 +32,8 @@ namespace Elementary.Compare.Test
                 b = 1,
                 c = new[] { 1, 2 },
                 d = new List<int> { 1, 2 },
-                e = new[] { 1, 2 }
+                e = new[] { 1, 2 },
+                f = new List<int>()
             };
 
             // ACT

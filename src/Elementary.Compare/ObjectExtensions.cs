@@ -55,8 +55,17 @@ namespace Elementary.Compare
                 if (!StringComparer.InvariantCulture.Equals(leftLeafEnumerator.Current.Key, rightLeafEnumerator.Current.Key))
                     return false;
 
-                if (!EqualityComparer<Type>.Default.Equals(leftLeafEnumerator.Current.Value.GetType(), rightLeafEnumerator.Current.Value.GetType()))
+                var leftType = leftLeafEnumerator.Current.Value.GetType();
+                if (!EqualityComparer<Type>.Default.Equals(leftType, rightLeafEnumerator.Current.Value.GetType()))
                     return false;
+
+                // types are equal
+
+                // if type is enumerable, check if both are empty
+                if (leftType != typeof(string) && leftType.GetInterface(nameof(IEnumerable)) != null)
+                {
+                    return EnumerableEqualityComparer.Default.Equals(leftLeafEnumerator.Current.Value as IEnumerable, rightLeafEnumerator.Current.Value as IEnumerable);
+                }
 
                 if (!EqualityComparer<object>.Default.Equals(leftLeafEnumerator.Current.Value, rightLeafEnumerator.Current.Value))
                     return false;
@@ -112,12 +121,24 @@ namespace Elementary.Compare
 
         private static void DeepCompareLeaves(KeyValuePair<string, object> leftLeaf, KeyValuePair<string, object> rightLeaf, DeepCompareResult compareResult)
         {
-            if (!EqualityComparer<Type>.Default.Equals(GetTypeOfValueSafe(leftLeaf.Value), GetTypeOfValueSafe(rightLeaf.Value)))
+            var leftType = GetTypeOfValueSafe(leftLeaf.Value);
+            if (!EqualityComparer<Type>.Default.Equals(leftType, GetTypeOfValueSafe(rightLeaf.Value)))
                 compareResult.Different.Types.Add(leftLeaf.Key);
 
-            if (!EqualityComparer<object>.Default.Equals(leftLeaf.Value, rightLeaf.Value))
-                compareResult.Different.Values.Add(leftLeaf.Key);
+            // types are equal
 
+            // if type is enumerable, check if both are empty
+            if (leftType != typeof(string) && leftType.GetInterface(nameof(IEnumerable)) != null)
+            {
+                if (!EnumerableEqualityComparer.Default.Equals(leftLeaf.Value as IEnumerable, rightLeaf.Value as IEnumerable))
+                    compareResult.Different.Values.Add(leftLeaf.Key);
+            }
+            else
+            {
+                // handle value as scalar value.
+                if (!EqualityComparer<object>.Default.Equals(leftLeaf.Value, rightLeaf.Value))
+                    compareResult.Different.Values.Add(leftLeaf.Key);
+            }
             compareResult.EqualValues.Add(leftLeaf.Key);
         }
 
