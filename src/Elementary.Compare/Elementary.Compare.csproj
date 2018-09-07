@@ -19,7 +19,7 @@
     <Authors>Wolfgang Gross</Authors>
     <PackageId>Elementary.Compare</PackageId>
     <PackageTags>reflection;compare;hierarchy</PackageTags>
-    <Version>0.0.1-alpha9</Version>
+    <Version>0.0.1-alpha10</Version>
     <PackageReleaseNotes>
       0.0.1: first release for interface testing.
     </PackageReleaseNotes>
