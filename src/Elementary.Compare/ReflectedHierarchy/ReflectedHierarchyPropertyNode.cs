@@ -9,7 +9,7 @@ namespace Elementary.Compare.ReflectedHierarchy
     public sealed class ReflectedHierarchyPropertyNode : ReflectedHierarchyObjectNodeBase, IReflectedHierarchyNode
     {
         public ReflectedHierarchyPropertyNode(object instance, PropertyInfo propertyInfo, IReflectedHierarchyNodeFactory nodeFactory)
-            : base(nodeFactory, new ReflectedHierarchyInstancePropertyNodeFlyweight(instance, propertyInfo))
+            : base(nodeFactory, ReflectedHierarchyNodeFlyweight.Create(instance, propertyInfo))
 
         { }
     }

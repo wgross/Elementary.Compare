@@ -3,7 +3,7 @@
     public class ReflectedHierarchyEnumerableRootNode : ReflectedHierarchyEnumerableNodeBase, IReflectedHierarchyNode
     {
         public ReflectedHierarchyEnumerableRootNode(object instance, IReflectedHierarchyNodeFactory nodeFactory)
-            : base(instance, nodeFactory, new ReflectedHierarchyInstanceNodeFlyweight(instance, string.Empty))
+            : base(instance, nodeFactory, ReflectedHierarchyNodeFlyweight.Create(instance, string.Empty))
         { }
     }
 }

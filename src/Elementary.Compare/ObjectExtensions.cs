@@ -22,7 +22,7 @@ namespace Elementary.Compare
         {
             var h = ReflectedHierarchy.ReflectedHierarchyFactory.Create(root, new ReflectedHierarchyNodeFactory());
             var flatted_h = new Dictionary<string, object>();
-            foreach (var (node, path) in h.DescendantsWithPath(getChildren: n => n.ChildNodes, depthFirst: true, maxDepth: maxDepth.GetValueOrDefault(100)))
+            foreach (var (node, path) in h.DescendantsAndSelfWithPathAvoidCycles(n => n.ChildNodes, maxDepth.GetValueOrDefault(100), new ReflectedHierarchyNodeEqualityComparer()))
             {
                 var parentPathAry = path.Select(p => p.Id).ToArray();
                 var pathAsString = $"{string.Join("/", parentPathAry)}/{node.Id}".TrimStart('/');

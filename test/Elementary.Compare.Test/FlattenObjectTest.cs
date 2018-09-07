@@ -19,7 +19,7 @@ namespace Elementary.Compare.Test
 
         private class CycleTestClass3
         {
-            public CycleTestClass3 Parent { get; set; }
+            public CycleTestClass3 parent { get; set; }
             public CycleTestClass3 child { get; set; }
         }
 
@@ -168,21 +168,23 @@ namespace Elementary.Compare.Test
         }
 
         [Fact]
-        public void Create_flat_map_breaks_on_cycle_after_maxDepth_self_replicating_2()
+        public void Create_flat_map_avoids_cycles()
         {
             // ARRANGE
 
             var obj = new CycleTestClass3();
-            obj.child = new CycleTestClass3 { Parent = obj };
-            obj.child.child = new CycleTestClass3 { Parent = obj.child };
+            obj.child = new CycleTestClass3 { parent = obj };
+            obj.child.child = new CycleTestClass3 { parent = obj.child };
 
             // ACT
 
-            var result = new Dictionary<string, object>(obj.Flatten(maxDepth: 10));
+            var result = new Dictionary<string, object>(obj.Flatten());
 
-            // ASSERT
+            // ASSERTRT
 
-            Assert.Equal(3, result.Count);
+            Assert.Equal(2, result.Count());
+            Assert.Null(result["child/child/child"]);
+            Assert.Null(result["parent"]);
         }
     }
 }
