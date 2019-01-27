@@ -179,12 +179,12 @@ namespace Elementary.Compare.Test
 
             // ACT
 
-            var result = left.DeepCompare(checkpoint);
+            var result = left.Diff(checkpoint);
 
             // ASSERT
 
             Assert.False(result.AreEqual);
-            Assert.Equal(left.PropertyPath(l => l.Data[0]).ToString(), result.Different.Values.Single());
+            Assert.Equal(PropertyPath.Make(left, l => l.Data[0]).ToString(), result.Different.Values.Single());
         }
 
         [Fact]
@@ -203,12 +203,12 @@ namespace Elementary.Compare.Test
 
             // ACT
 
-            var result = left.DeepCompare(checkpoint);
+            var result = left.Diff(checkpoint);
 
             // ASSERT
 
             Assert.False(result.AreEqual);
-            Assert.Equal(left.PropertyPath(l => l.Data[0]).ToString(), result.Missing.Left.Single());
+            Assert.Equal(PropertyPath.Make(left, l => l.Data[0]).ToString(), result.Missing.Left.Single());
         }
 
         [Fact]
@@ -227,12 +227,12 @@ namespace Elementary.Compare.Test
 
             // ACT
 
-            var result = left.DeepCompare(checkpoint);
+            var result = left.Diff(checkpoint);
 
             // ASSERT
 
             Assert.False(result.AreEqual);
-            Assert.Equal(left.PropertyPath(l => l.Data[1]).ToString(), result.Missing.Right.Single());
+            Assert.Equal(PropertyPath.Make(left, l => l.Data[1]).ToString(), result.Missing.Right.Single());
         }
 
         [Fact]
@@ -251,12 +251,12 @@ namespace Elementary.Compare.Test
 
             // ACT
 
-            var result = left.DeepCompare(checkpoint);
+            var result = left.Diff(checkpoint);
 
             // ASSERT
 
             Assert.False(result.AreEqual);
-            Assert.Equal(left.PropertyPath(l => l.Data).ToString(), result.Different.Values.Single());
+            Assert.Equal(PropertyPath.Make(left, l => l.Data).ToString(), result.Different.Values.Single());
         }
     }
 }

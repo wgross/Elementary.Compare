@@ -27,6 +27,7 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/wgross/Elementary.Compare</RepositoryUrl>
     <PackageProjectUrl>https://github.com/wgross/Elementary.Hierarchy</PackageProjectUrl>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
 
   <!-- dependencies -->

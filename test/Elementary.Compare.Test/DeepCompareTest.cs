@@ -3,10 +3,10 @@ using Xunit;
 
 namespace Elementary.Compare.Test
 {
-    public class DeepCompareTest
+    public class DiffTest
     {
         [Fact]
-        public void DeepCompare_equal_instances()
+        public void Diff_equal_instances()
         {
             // ARRANGE
 
@@ -22,7 +22,7 @@ namespace Elementary.Compare.Test
 
             // ACT
 
-            var result = left.DeepCompare(right);
+            var result = left.Diff(right);
 
             // ASSERT
 
@@ -32,7 +32,7 @@ namespace Elementary.Compare.Test
         }
 
         [Fact]
-        public void DeepCompare_same_instance()
+        public void Diff_same_instance()
         {
             // ARRANGE
 
@@ -43,7 +43,7 @@ namespace Elementary.Compare.Test
 
             // ACT
 
-            var result = left.DeepCompare(left);
+            var result = left.Diff(left);
 
             // ASSERT
 
@@ -52,7 +52,7 @@ namespace Elementary.Compare.Test
         }
 
         [Fact]
-        public void DeepCompare_finds_additional_property()
+        public void Diff_finds_additional_property()
         {
             // ARRANGE
 
@@ -69,8 +69,8 @@ namespace Elementary.Compare.Test
 
             // ACT
 
-            var result1 = obj1.DeepCompare(obj2);
-            var result2 = obj2.DeepCompare(obj1);
+            var result1 = obj1.Diff(obj2);
+            var result2 = obj2.Diff(obj1);
 
             // ASSERT
 
@@ -83,7 +83,65 @@ namespace Elementary.Compare.Test
         }
 
         [Fact]
-        public void DeepCompare_finds_different_property_types()
+        public void Diff_ignores_additional_property_if_excluded()
+        {
+            // ARRANGE
+
+            var obj1 = new
+            {
+                a = "a",
+                b = "b"
+            };
+
+            var obj2 = new
+            {
+                a = "a"
+            };
+
+            // ACT
+
+            var result1 = obj1.Flatten().Exclude(o => o.b).Diff(obj2);
+            var result2 = obj2.Diff(obj1.Flatten().Exclude(o => o.b));
+
+            // ASSERT
+
+            Assert.False(result1.AreEqual);
+            Assert.False(result2.AreEqual);
+            Assert.Single(result1.Missing);
+            Assert.Equal("b", result1.Missing.Right.Single());
+            Assert.Single(result2.Missing);
+            Assert.Equal("b", result2.Missing.Left.Single());
+        }
+
+        //[Fact]
+        //public void Diff_excludes_additional_property()
+        //{
+        //    // ARRANGE
+
+        //    var obj1 = new
+        //    {
+        //        a = "a",
+        //        b = "b"
+        //    };
+
+        //    var obj2 = new
+        //    {
+        //        a = "a"
+        //    };
+
+        //    // ACT
+
+        //    // var result1 = obj1.Diff(obj2);
+        //    var result2 = ObjectExtensions.Diff(obj1, obj2.Diff(obj1.Flatten().Exclude(o => o.b)));
+
+        //    // ASSERT
+
+        //    //Assert.True(result1.AreEqual);
+        //    Assert.True(result2.AreEqual);
+        //}
+
+        [Fact]
+        public void Diff_finds_different_property_types()
         {
             // ARRANGE
 
@@ -99,7 +157,7 @@ namespace Elementary.Compare.Test
 
             // ACT
 
-            var result = left.DeepCompare(right);
+            var result = left.Diff(right);
 
             // ASSERT
 
@@ -109,7 +167,7 @@ namespace Elementary.Compare.Test
         }
 
         [Fact]
-        public void DeepCompare_finds_different_enumerable_items()
+        public void Diff_finds_different_enumerable_items()
         {
             // ARRANGE
 
@@ -125,7 +183,7 @@ namespace Elementary.Compare.Test
 
             // ACT
 
-            var result = left.DeepCompare(right);
+            var result = left.Diff(right);
 
             // ASSERT
 
@@ -135,7 +193,7 @@ namespace Elementary.Compare.Test
         }
 
         [Fact]
-        public void DeepCompare_finds_additional_enumerable_items()
+        public void Diff_finds_additional_enumerable_items()
         {
             // ARRANGE
 
@@ -151,8 +209,8 @@ namespace Elementary.Compare.Test
 
             // ACT
 
-            var result1 = left.DeepCompare(right);
-            var result2 = right.DeepCompare(left);
+            var result1 = left.Diff(right);
+            var result2 = right.Diff(left);
 
             // ASSERT
 
@@ -166,7 +224,7 @@ namespace Elementary.Compare.Test
         }
 
         [Fact]
-        public void DeepCompare_finds_enumerable_items_having_different_types()
+        public void Diff_finds_enumerable_items_having_different_types()
         {
             // ARRANGE
 
@@ -182,7 +240,7 @@ namespace Elementary.Compare.Test
 
             // ACT
 
-            var result = left.DeepCompare(right);
+            var result = left.Diff(right);
 
             // ASSERT
 
