@@ -14,7 +14,7 @@ namespace Elementary.Compare.Test
 
             // ACT
 
-            var result = left.PropertyPath(p => p);
+            var result = PropertyPath.Make(left, o => o);
 
             // ASSERT
 
@@ -30,7 +30,7 @@ namespace Elementary.Compare.Test
 
             // ACT
 
-            var result = left.PropertyPath(p => p.a);
+            var result = PropertyPath.Make(left, o => o.a);
 
             // ASSERT>
 
@@ -46,7 +46,7 @@ namespace Elementary.Compare.Test
 
             // ACT
 
-            var result = left.PropertyPath(p => p.a[0]);
+            var result = PropertyPath.Make(left, o => o.a[0]);
 
             // ASSERT>
 

@@ -5,181 +5,145 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 
 namespace Elementary.Compare
 {
     public static class ObjectExtensions
     {
-        /// <summary>
-        /// Returns a key value stream of pathes to leaves and the leaves values.
-        /// The travesal breaks after a depth of 100 nodes.
-        /// </summary>
-        /// <param name="root"></param>
-        /// <param name="maxDepth"></param>
-        /// <returns></returns>
-        public static IEnumerable<KeyValuePair<string, object>> Flatten(this object root, int? maxDepth = null)
+        //public static bool DeepEquals(this object left, object right)
+        //{
+        //    if (ReferenceEquals(left, right))
+        //        return true;
+
+        //    var leftLeafEnumerator = left.Flatten().GetEnumerator();
+        //    var rightLeafEnumerator = right.Flatten().GetEnumerator();
+
+        //    (bool left, bool right) moveNextInStreams = (leftLeafEnumerator.MoveNext(), rightLeafEnumerator.MoveNext());
+        //    do
+        //    {
+        //        if (!StringComparer.InvariantCulture.Equals(leftLeafEnumerator.Current.Key, rightLeafEnumerator.Current.Key))
+        //            return false;
+
+        //        var leftType = leftLeafEnumerator.Current.Value.GetType();
+        //        if (!EqualityComparer<Type>.Default.Equals(leftType, rightLeafEnumerator.Current.Value.GetType()))
+        //            return false;
+
+        //        // types are equal
+
+        //        // if type is enumerable, check if both are empty
+        //        if (leftType != typeof(string) && leftType.GetInterface(nameof(IEnumerable)) != null)
+        //        {
+        //            return EnumerableEqualityComparer.Default.Equals(leftLeafEnumerator.Current.Value as IEnumerable, rightLeafEnumerator.Current.Value as IEnumerable);
+        //        }
+
+        //        if (!EqualityComparer<object>.Default.Equals(leftLeafEnumerator.Current.Value, rightLeafEnumerator.Current.Value))
+        //            return false;
+
+        //        moveNextInStreams = (leftLeafEnumerator.MoveNext(), rightLeafEnumerator.MoveNext());
+        //        if (moveNextInStreams.left != moveNextInStreams.right)
+        //            return false;
+        //    }
+        //    while (moveNextInStreams.left && moveNextInStreams.right);
+
+        //    return true;
+        //}
+
+        public static DiffResult Diff<TLeft, TRight>(this TLeft left, TRight right)
+            where TLeft : class
+            where TRight : class
         {
-            var h = ReflectedHierarchy.ReflectedHierarchyFactory.Create(root, new ReflectedHierarchyNodeFactory());
-            var flatted_h = new Dictionary<string, object>();
-            foreach (var (node, path) in h.DescendantsAndSelfWithPathAvoidCycles(n => n.ChildNodes, maxDepth.GetValueOrDefault(100), new ReflectedHierarchyNodeEqualityComparer()))
-            {
-                var parentPathAry = path.Select(p => p.Id).ToArray();
-                var pathAsString = $"{string.Join("/", parentPathAry)}/{node.Id}".TrimStart('/');
-
-                // first check if we are already at max level
-                if (parentPathAry.Length == maxDepth)
-                    throw new InvalidOperationException($"Traversal stopped: maxDepth='{maxDepth.GetValueOrDefault(100)}' was reached at path='{pathAsString}'.");
-
-                if (maxDepth.GetValueOrDefault(100) > parentPathAry.Length)
-                    if (node.HasChildNodes)
-                        continue;
-
-                var (success, value) = node.TryGetValue<object>();
-
-                yield return new KeyValuePair<string, object>(pathAsString, value);
-            }
-        }
-
-        public static bool DeepEquals(this object left, object right)
-        {
-            if (ReferenceEquals(left, right))
-                return true;
-
-            var leftLeafEnumerator = left.Flatten().GetEnumerator();
-            var rightLeafEnumerator = right.Flatten().GetEnumerator();
-
-            (bool left, bool right) moveNextInStreams = (leftLeafEnumerator.MoveNext(), rightLeafEnumerator.MoveNext());
-            do
-            {
-                if (!StringComparer.InvariantCulture.Equals(leftLeafEnumerator.Current.Key, rightLeafEnumerator.Current.Key))
-                    return false;
-
-                var leftType = leftLeafEnumerator.Current.Value.GetType();
-                if (!EqualityComparer<Type>.Default.Equals(leftType, rightLeafEnumerator.Current.Value.GetType()))
-                    return false;
-
-                // types are equal
-
-                // if type is enumerable, check if both are empty
-                if (leftType != typeof(string) && leftType.GetInterface(nameof(IEnumerable)) != null)
-                {
-                    return EnumerableEqualityComparer.Default.Equals(leftLeafEnumerator.Current.Value as IEnumerable, rightLeafEnumerator.Current.Value as IEnumerable);
-                }
-
-                if (!EqualityComparer<object>.Default.Equals(leftLeafEnumerator.Current.Value, rightLeafEnumerator.Current.Value))
-                    return false;
-
-                moveNextInStreams = (leftLeafEnumerator.MoveNext(), rightLeafEnumerator.MoveNext());
-                if (moveNextInStreams.left != moveNextInStreams.right)
-                    return false;
-            }
-            while (moveNextInStreams.left && moveNextInStreams.right);
-
-            return true;
-        }
-
-        public static DeepCompareResult DeepCompare(this object left, object right)
-        {
-            return left.DeepCompare(right.Flatten().ToDictionary(kv => kv.Key));
-        }
-
-        public static DeepCompareResult DeepCompare(this object left, IEnumerable<KeyValuePair<string, object>> right)
-        {
-            return left.DeepCompare(right.ToDictionary(kv => kv.Key));
-        }
-
-        private static DeepCompareResult DeepCompare(this object left, IDictionary<string, KeyValuePair<string, object>> rightLeaves)
-        {
-            // optimization removed: it doenst fill the 'EqualValues' list
+            // optimization removed: it doesnt fill the 'EqualValues' list.
+            // for optimization it might be better to travers one instance and add the leaves to the equals list.
             // if (ReferenceEquals(left, right))
-            //     return new DeepCompareResult();
+            //     return new DiffResult();
 
-            var leftLeafEnumerator = left.Flatten().GetEnumerator();
-            var compareResult = new DeepCompareResult();
+            return DiffFlattendLeaves(
+                left is IFlattened fl ? fl : left.Flatten().Build(),
+                right is IFlattened fr ? fr : right.Flatten().Build(),
+                new DiffResult());
+        }
 
-            foreach (var leftLeaf in left.Flatten())
+        //private static DiffResult DiffFlattendInstances(this object left, IDictionary<string, KeyValuePair<string, object>> rightLeaves, DiffResult diffResult)
+        //{
+        //    foreach (var leftLeaf in left.Flatten())
+        //    {
+        //        if (rightLeaves.TryGetValue(leftLeaf.Key, out var rightLeaf))
+        //        {
+        //            DiffFlattenedLeavesValues(leftLeaf.Key, leftLeaf, rightLeaf, diffResult);
+        //            rightLeaves.Remove(leftLeaf.Key);
+        //        }
+        //        else
+        //        {
+        //            diffResult.Missing.Right.Add(leftLeaf.Key);
+        //        }
+        //    }
+
+        //    // add all uncompared left proerties to the diff result as 'missing'
+        //    return rightLeaves.Aggregate(diffResult, (cr, kv) =>
+        //    {
+        //        cr.Missing.Left.Add(kv.Key);
+        //        return cr;
+        //    });
+        //}
+
+        private static DiffResult DiffFlattendLeaves(IFlattened flattenedLeft, IFlattened flattenedRight, DiffResult diffResult)
+        {
+            var flattendRightLeaves = flattenedRight.ToDictionary(kv => kv.Key);
+
+            foreach (var leftLeaf in flattenedLeft)
             {
-                if (rightLeaves.TryGetValue(leftLeaf.Key, out var rightLeaf))
+                if (flattendRightLeaves.TryGetValue(leftLeaf.Key, out var rightLeaf))
                 {
-                    DeepCompareLeaves(leftLeaf, rightLeaf, compareResult);
-                    rightLeaves.Remove(leftLeaf.Key);
+                    DiffFlattenedLeavesValues(leftLeaf.Key, leftLeaf.Value, rightLeaf.Value, diffResult);
+                    flattendRightLeaves.Remove(leftLeaf.Key);
                 }
                 else
                 {
-                    compareResult.Missing.Right.Add(leftLeaf.Key);
+                    diffResult.Missing.Right.Add(leftLeaf.Key);
                 }
             }
 
             // add all uncompared left proerties to the result object
-            return rightLeaves.Aggregate(compareResult, (cr, kv) =>
+            return flattendRightLeaves.Aggregate(diffResult, (cr, kv) =>
             {
                 cr.Missing.Left.Add(kv.Key);
                 return cr;
             });
         }
 
-        private static void DeepCompareLeaves(KeyValuePair<string, object> leftLeaf, KeyValuePair<string, object> rightLeaf, DeepCompareResult compareResult)
+        /// <summary>
+        /// Compares values fro a supposedly equal leaves of a flattened objects. Leaves my differ in type and value.
+        /// THe keys of the leaf is added to the diff result if  onethe comparison fails.
+        /// </summary>
+        /// <param name="leftLeafValue"></param>
+        /// <param name="rightLeafValue"></param>
+        /// <param name="compareResult"></param>
+        private static void DiffFlattenedLeavesValues(string key, object leftLeafValue, object rightLeafValue, DiffResult compareResult)
         {
-            var leftType = GetTypeOfValueSafe(leftLeaf.Value);
-            if (!EqualityComparer<Type>.Default.Equals(leftType, GetTypeOfValueSafe(rightLeaf.Value)))
-                compareResult.Different.Types.Add(leftLeaf.Key);
+            // compare types of two values
 
-            // types are equal
+            var leftType = GetTypeOfValueSafe(leftLeafValue);
+            if (!EqualityComparer<Type>.Default.Equals(leftType, GetTypeOfValueSafe(rightLeafValue)))
+                compareResult.Different.Types.Add(key);
+
+            // compare the values.
 
             // if type is enumerable, check if both are empty
             if (leftType != typeof(string) && leftType.GetInterface(nameof(IEnumerable)) != null)
             {
-                if (!EnumerableEqualityComparer.Default.Equals(leftLeaf.Value as IEnumerable, rightLeaf.Value as IEnumerable))
-                    compareResult.Different.Values.Add(leftLeaf.Key);
+                if (!EnumerableEqualityComparer.Default.Equals(leftLeafValue as IEnumerable, rightLeafValue as IEnumerable))
+                    compareResult.Different.Values.Add(key);
             }
             else
             {
                 // handle value as scalar value.
-                if (!EqualityComparer<object>.Default.Equals(leftLeaf.Value, rightLeaf.Value))
-                    compareResult.Different.Values.Add(leftLeaf.Key);
+                if (!EqualityComparer<object>.Default.Equals(leftLeafValue, rightLeafValue))
+                    compareResult.Different.Values.Add(key);
             }
-            compareResult.EqualValues.Add(leftLeaf.Key);
+            compareResult.EqualValues.Add(key);
         }
 
         private static Type GetTypeOfValueSafe(object value) => value?.GetType() ?? typeof(object);
-
-        public static HierarchyPath<string> PropertyPath<TRoot>(this TRoot root, Expression<Func<TRoot, object>> path)
-        {
-            return HierarchyPath.Create(PathSegments<TRoot>(root, path).Reverse());
-        }
-
-        public static IEnumerable<string> PathSegments<T>(T instance, Expression<Func<T, object>> access)
-        {
-            Expression current = access.Body;
-
-            while (current != null)
-            {
-                if (current is UnaryExpression && current.NodeType == ExpressionType.Convert)
-                {
-                    current = ((UnaryExpression)current).Operand;
-                }
-                else if (current is MemberExpression)
-                {
-                    var currentMemberExpression = current as MemberExpression;
-                    yield return currentMemberExpression.Member.Name;
-                    current = currentMemberExpression.Expression;
-                }
-                else if (current is BinaryExpression)
-                {
-                    var currentBinaryExpression = current as BinaryExpression;
-                    yield return ((ConstantExpression)currentBinaryExpression.Right).Value.ToString();
-                    current = currentBinaryExpression.Left;
-                }
-                else if (current is ParameterExpression)
-                {
-                    var parameterExpression = current as ParameterExpression;
-                    current = null;
-                }
-            }
-
-            yield break;
-        }
 
         /// <summary>
         /// Verifies if all properties of the given object have value != default(T). This is useful to
