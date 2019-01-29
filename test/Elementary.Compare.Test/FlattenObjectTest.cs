@@ -44,7 +44,7 @@ namespace Elementary.Compare.Test
 
             // ACT
 
-            var result = obj.Flatten();
+            var result = obj.Flatten().Build();
 
             // ASSERT
 
@@ -67,7 +67,7 @@ namespace Elementary.Compare.Test
 
             // ACT
 
-            var result = obj.Flatten();
+            var result = obj.Flatten().Build();
 
             // ASSERT
 
@@ -88,7 +88,7 @@ namespace Elementary.Compare.Test
 
             // ACT
 
-            var result = obj.Flatten();
+            var result = obj.Flatten().Build();
 
             // ASSERT
 
@@ -112,7 +112,7 @@ namespace Elementary.Compare.Test
 
             // ACT
 
-            var result = obj.Flatten();
+            var result = obj.Flatten().Build();
 
             // ASSERT
 
@@ -140,7 +140,7 @@ namespace Elementary.Compare.Test
 
             // ACT
 
-            var result = obj.Flatten().Exclude(PropertyPath.Make(obj, o => o.b));
+            var result = obj.Flatten().Exclude(o => o.b).Build();
 
             // ASSERT
 
@@ -163,7 +163,7 @@ namespace Elementary.Compare.Test
 
             // ACT
 
-            var result = obj.Flatten(maxDepth: 10);
+            var result = obj.Flatten(maxDepth: 10).Build();
 
             // ASSERT
 
@@ -185,7 +185,7 @@ namespace Elementary.Compare.Test
 
             // ACT
 
-            var result = obj.Flatten();
+            var result = obj.Flatten().Build();
 
             // ASSERT
             // cycle is discovered at second step. Two a's are included
@@ -212,7 +212,7 @@ namespace Elementary.Compare.Test
 
             // ACT
 
-            var result = obj.Flatten();
+            var result = obj.Flatten().Build();
 
             // ASSERT
             // cycle is discovered, the  parent of the root and the child of the child is added to the list
@@ -232,7 +232,7 @@ namespace Elementary.Compare.Test
             // ACT
 
             //var result = Assert.Throws<InvalidOperationException>(() => new Dictionary<string, object>(obj.Flatten(maxDepth: 10)));
-            var result = obj.Flatten(maxDepth: 5);
+            var result = obj.Flatten(maxDepth: 5).Build();
 
             // ASSERT
             // the cycle is no discovered, the traversal break after reachin max depth

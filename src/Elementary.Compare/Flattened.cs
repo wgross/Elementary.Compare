@@ -18,7 +18,7 @@ namespace Elementary.Compare
         /// <param name="instance"></param>
         /// <param name="maxDepth"></param>
         /// <returns></returns>
-        public static Flattened<T> Flatten<T>(this T instance, int? maxDepth = null, Action<Flattened<T>> setup = null) => new Flattened<T>(instance, maxDepth);
+        public static FlattenedObjectBuilder<T> Flatten<T>(this T instance, int? maxDepth = null) => new FlattenedObjectBuilder<T>(instance, maxDepth);
     }
 
     /// <summary>
@@ -29,7 +29,7 @@ namespace Elementary.Compare
     {
     }
 
-    public sealed class Flattened<T> : IFlattened
+    public sealed class FlattenedObjectBuilder<T>
     {
         private List<HierarchyPath<string>> Excluded { get; } = new List<HierarchyPath<string>>();
 
@@ -37,48 +37,62 @@ namespace Elementary.Compare
 
         public int? MaxDepth { get; }
 
-        public Flattened(T instance, int? maxDepth)
+        public FlattenedObjectBuilder(T instance, int? maxDepth)
         {
             this.Instance = instance;
             this.MaxDepth = maxDepth.GetValueOrDefault(100);
         }
 
-        public IEnumerator<KeyValuePair<string, object>> GetEnumerator()
+        private static string JoinParentPathAndNodeId(IReflectedHierarchyNode node, HierarchyPath<string> parentPath) => $"{string.Join("/", parentPath)}/{node.Id}".TrimStart('/');
+
+        private IEnumerable<KeyValuePair<string, object>> Traverse()
         {
             var h = ReflectedHierarchy.ReflectedHierarchyFactory.Create(this.Instance, new ReflectedHierarchyNodeFactory());
             foreach (var (node, path) in h.DescendantsAndSelfWithPathAvoidCycles(n => n.ChildNodes, this.MaxDepth, new ReflectedHierarchyNodeEqualityComparer()))
             {
                 var parentPath = HierarchyPath.Create(path.Skip(1).Select(p => p.Id).ToArray());
-
-                var pathAsString = $"{string.Join("/", parentPath)}/{node.Id}".TrimStart('/');
+                var nodePath = parentPath.Join(node.Id);
+                string nodePathAsString = nodePath.ToString();
 
                 if (parentPath.Items.Count() >= this.MaxDepth)
-                    throw new InvalidOperationException($"Traversal stopped: maxDepth='{this.MaxDepth}' was reached at path='{pathAsString}'.");
+                    throw new InvalidOperationException($"Traversal stopped: maxDepth='{this.MaxDepth}' was reached at path='{nodePathAsString}'.");
 
                 if (node.HasChildNodes)
-                    continue; // skip this node, it this isn't a leave.
+                    continue; // skip this node, its not a leave.
 
                 // if the nodes path is found in the excluded collection it is skipped.
                 // this is the most epensive test, should therefor be the last one.
-                if (this.Excluded.Any(ex => ex.Equals(parentPath) || ex.IsAncestorOf(parentPath)))
+                if (this.Excluded.Any(ex => ex.Equals(nodePath) || ex.IsAncestorOf(nodePath)))
                     continue;
 
-                yield return new KeyValuePair<string, object>(pathAsString, node.TryGetValue<object>().Item2);
+                yield return new KeyValuePair<string, object>(nodePathAsString, node.TryGetValue<object>().Item2);
             }
         }
 
-        IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
-
-        public Flattened<T> Exclude(HierarchyPath<string> propertyPath)
-        {
-            this.Excluded.Add(propertyPath);
-            return this;
-        }
-
-        public Flattened<T> Exclude(Expression<Func<T, object>> selectPropertyPath)
+        public FlattenedObjectBuilder<T> Exclude(Expression<Func<T, object>> selectPropertyPath)
         {
             this.Excluded.Add(HierarchyPath.Create(PropertyPath.PathSegments<T>(selectPropertyPath)));
             return this;
         }
+
+        public FlattenedObject Build() => new FlattenedObject(this.Traverse());
+    }
+
+    public sealed class FlattenedObject : IFlattened
+    {
+        private KeyValuePair<string, object>[] Leaves { get; }
+
+        public FlattenedObject(IEnumerable<KeyValuePair<string, object>> leaves)
+        {
+            this.Leaves = leaves.ToArray();
+        }
+
+        public IEnumerator<KeyValuePair<string, object>> GetEnumerator()
+        {
+            for (int i = 0; i < this.Leaves.Length; i++)
+                yield return this.Leaves[i];
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
     }
 }
