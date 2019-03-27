@@ -20,7 +20,7 @@ namespace Elementary.Compare.Test
         }
 
         [Fact]
-        public void EnumerableEqualityComparer_accepts_bopthy_null()
+        public void EnumerableEqualityComparer_accepts_both_null()
         {
             // ACT
 

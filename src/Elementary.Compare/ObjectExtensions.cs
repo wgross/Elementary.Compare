@@ -103,7 +103,7 @@ namespace Elementary.Compare
                 }
             }
 
-            // add all uncompared left proerties to the result object
+            // add all uncompared left properties to the result object
             return flattendRightLeaves.Aggregate(diffResult, (cr, kv) =>
             {
                 cr.Missing.Left.Add(kv.Key);
