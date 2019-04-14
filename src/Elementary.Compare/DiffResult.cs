@@ -38,22 +38,5 @@ namespace Elementary.Compare
         public Missings Missing { get; } = new Missings();
 
         public IList<string> EqualValues { get; } = new List<string>();
-
-        public DiffResult Exclude(HierarchyPath<string> propertyPath)
-        {
-            var propertyPathStr = propertyPath.ToString();
-
-            this.Different.Values
-                .Where(d => d.StartsWith(propertyPathStr))
-                .ToList()
-                .ForEach(d => this.Different.Values.Remove(d));
-
-            this.Different.Types
-                .Where(d => d.StartsWith(propertyPathStr))
-                .ToList()
-                .ForEach(d => this.Different.Values.Remove(d));
-
-            return this;
-        }
     }
 }

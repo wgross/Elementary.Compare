@@ -168,7 +168,7 @@ namespace Elementary.Compare.Test
             };
 
             // ACT
-            // exlcude prooerty 'b' from comparision
+            // exlcude property 'b' from comparision
 
             var result1 = obj1.Flatten().Exclude(o => o.b).Build().Diff(obj2);
             var result2 = obj2.Diff(obj1.Flatten().Exclude(o => o.b).Build());
