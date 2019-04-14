@@ -365,6 +365,7 @@ namespace Elementary.Compare.Test
 
             Assert.False(result.AreEqual);
             Assert.Equal(PropertyPath.Make(left, l => l.Data[1]).ToString(), result.Missing.Right.Single());
+            result.Different.Values.Single()
         }
 
         [Fact]
