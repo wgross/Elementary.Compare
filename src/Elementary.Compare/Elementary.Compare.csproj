@@ -18,24 +18,22 @@
     <Copyright>Copyright © 2018</Copyright>
     <Authors>Wolfgang Gross</Authors>
     <PackageId>Elementary.Compare</PackageId>
-    <PackageTags>reflection;compare;hierarchy</PackageTags>
-    <Version>0.0.1-alpha7</Version>
+    <PackageTags>reflection;object comparision;</PackageTags>
+    <Version>0.0.1-alpha8</Version>
     <PackageReleaseNotes>
-      0.0.1: first release for interface testing.
+      0.0.1: first release of Diff, Contains, checkpointing and NoPropertyContainsDefaultValue.
     </PackageReleaseNotes>
     <PackageLicenseUrl>https://raw.githubusercontent.com/wgross/Elementary.Compare/master/LICENSE</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/wgross/Elementary.Compare</RepositoryUrl>
+    <RepositoryUrl>https://github.com/wgross/Elementary.Compare.git</RepositoryUrl>
     <PackageProjectUrl>https://github.com/wgross/Elementary.Hierarchy</PackageProjectUrl>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
 
   <!-- dependencies -->
   <ItemGroup>
-    <PackageReference Include="Elementary.Hierarchy" Version="2.1.0" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-63127-02">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
+    <PackageReference Include="Elementary.Hierarchy" Version="2.1.1" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-18618-05" PrivateAssets="All" />      
   </ItemGroup>
   
 </Project>

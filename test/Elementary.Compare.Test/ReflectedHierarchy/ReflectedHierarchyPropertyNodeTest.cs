@@ -1,6 +1,9 @@
 ﻿using Elementary.Compare.ReflectedHierarchy;
 using Elementary.Hierarchy;
+using Elementary.Hierarchy.Generic;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace Elementary.Compare.Test.ReflectedHierarchy
@@ -135,5 +138,9 @@ namespace Elementary.Compare.Test.ReflectedHierarchy
             Assert.IsType<ReflectedHierarchyPropertyNode>(node);
             Assert.Equal(typeof(int), result);
         }
+
+        
+
+       
     }
 }

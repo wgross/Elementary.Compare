@@ -12,40 +12,34 @@ namespace Elementary.Compare.ReflectedHierarchy
         string Id { get; }
     }
 
-    public sealed class ReflectedHierarchyInstanceNodeFlyweight : IReflectedHierarchyNodeFlyweight
+    public sealed class ReflectedHierarchyNodeFlyweight : IReflectedHierarchyNodeFlyweight
     {
-        private readonly object instance;
-        private readonly string id;
+        public static ReflectedHierarchyNodeFlyweight Create(object instance, PropertyInfo property) => new ReflectedHierarchyNodeFlyweight(
+            instance,
+            property.Name,
+            nodeValue: property.GetValue(instance),
+            nodeValueType: property.GetValue(instance)?.GetType() ?? property.PropertyType);
 
-        public ReflectedHierarchyInstanceNodeFlyweight(object instance, string id)
+        public static ReflectedHierarchyNodeFlyweight Create(object instance, string id) => new ReflectedHierarchyNodeFlyweight(
+            instance,
+            id,
+            nodeValue: instance,
+            nodeValueType: instance.GetType());
+
+        public object Instance { get; }
+
+        public string Id { get; }
+
+        public object NodeValue { get; }
+
+        public Type NodeValueType { get; }
+
+        private ReflectedHierarchyNodeFlyweight(object instance, string id, object nodeValue, Type nodeValueType)
         {
-            this.instance = instance;
-            this.id = id;
+            this.Instance = instance;
+            this.Id = id;
+            this.NodeValue = nodeValue;
+            this.NodeValueType = nodeValueType;
         }
-
-        public object NodeValue => this.instance;
-
-        public string Id => this.id;
-
-        public Type NodeValueType => this.instance.GetType();
-    }
-
-    public sealed class ReflectedHierarchyInstancePropertyNodeFlyweight : IReflectedHierarchyNodeFlyweight
-    {
-        private readonly object instance;
-
-        private readonly PropertyInfo property;
-
-        public ReflectedHierarchyInstancePropertyNodeFlyweight(object instance, PropertyInfo property)
-        {
-            this.instance = instance;
-            this.property = property;
-        }
-
-        public object NodeValue => this.property.GetValue(this.instance);
-
-        public string Id => this.property.Name;
-
-        public Type NodeValueType => this.NodeValue?.GetType() ?? this.property.PropertyType;
     }
 }
