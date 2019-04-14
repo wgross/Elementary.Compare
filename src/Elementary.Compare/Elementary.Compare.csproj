@@ -19,7 +19,7 @@
     <Authors>Wolfgang Gross</Authors>
     <PackageId>Elementary.Compare</PackageId>
     <PackageTags>reflection;object comparision;</PackageTags>
-    <Version>0.0.1-alpha11</Version>
+    <Version>0.0.1-alpha8</Version>
     <PackageReleaseNotes>
       0.0.1: first release of Diff, Contains, checkpointing and NoPropertyContainsDefaultValue.
     </PackageReleaseNotes>
