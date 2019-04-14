@@ -1,84 +1,67 @@
 # Elementary.Compare
 
-Elementary.Compare applies the graph traversal agorithms from Elementary.Hierarchy to flatten a .Net object tree along the C# properties of these objects to a stream of key value pairs where the key is the path to a leaf and the value of the leaf. This allows to compare two objects trees by value.
+Elementary.Compare provides some algorithms to compare two object graphs of different class types by (property) value. Bothy object graphs are traversed and for all public properties thet postion (paths of public properties leading to them) and their values are compared. The result is a description of differences (value and value type) and missing properties on each side (paths which doesn't exist on both sides). 
 
 ## Installation
 
-Add the nuget pacgae to a project using Visual Studio or the dot net commandline
+Add the nuget packgae to a project using Visual Studio or the dot net commandline
 
 ```
 dotnet add package Elementary.Compare
 ```
 ## Usage
 
-To flatten an object tree to instances of KeyValue<string,object> where the 'Key' is a path to a leaf property and 'Value' is the leaf properties value as object instance:
+To compare two classes use the Diff extension method:
 
 ```C#
 using Elementary.Compare;
 
-var obj = new {
-  a = new {
+var left = new {
+  ...
+};
+
+var right = new {
+  ...
+};
+
+var diffResult = left.Diff(right));
+
+Assert.True(diffResult.AreEqual)
+```
+
+To compare the state of a class before and after a change, use a checkpoint:
+
+```C#
+using Elementary.Compare;
+
+var obj = new Data{
+  a = new SubData {
     b = 1
   }
 };
 
-var result = obj.Flatten().ToArray();
+var checkpoint = obj.Flatten().Build();
 
-Assert.Equal("a/b", result.Single().Key);
-Assert.Equal(1, result.Single().Value);
+// change the original object
+obj.a.b = 2
+
+var diffResult = obj.Diff(checkpoint);
+
+Assert.False(diffResult.AreEqual);
+Assert.Equal(PropertyPath.Make(obj, o => o.a.b), diffResult.Different.Values.Single());
 ```
 
-To verify equality of two identically structured object trees.
-
+If working with test data as input of test scenarios (dto-mapping for example) you might want to be sure that all properties are filled with a non-default value. To verify this use the NoPropertyHasDefaultValue extension method. It will reject empty collections, properties with value of default(T) and null for Nullable<T> Properties or reference type properties.
+  
 ```C#
 using Elementary.Compare;
 
-var left = new {
-  ...
+var obj = new  {
+ ...
 };
 
-var right = new {
-  ...
-};
+var result = obj.NoPropertyHasDefaultValue();
 
-Assert.True(left.DeepEquals(right));
+Assert.True(result);
 ```
-
-To compare to instance of object trees and get a report of their differences and equalities:
-
-```C#
-
-using Elementary.Compare;
-
-var left = new {
-  ...
-};
-
-var right = new {
-  ...
-};
-
-var result = left.DeepCompare(left);
-
-Assert.False(result.AreEqual)
-Assert.Equal(2, result.EqualValues.Count());
-Assert.Contains("a/b", result.Missing.Right); // right is missing property left.a.b
-Assert.Contains("c/d", result.Missing.Left); // left is missing property right.c.d
-Assert.Contains("x/y", result.Different.Values); // left and right have property .x.y, but values differ
-Assert.Contains("o/p", result.Different.Types); // left and right have property .o.p, but property types differ
-```
-
-To create property pathes in a refactorable way:
-
-```C#
-
-using Elementary.Compare;
-
-var obj = {
-  a = "txt"
-  b = new[]{ 1 }
-};
-
-Assert.Equal(HierarchyPath.Create("a"), obj.PropertyPath(o => o.a));
-Assert.Equal(HierarchyPath.Create("b","0"), obj.PropertyPath(o => o.b[0]));
-```
+ 
