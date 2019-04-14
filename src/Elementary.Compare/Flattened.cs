@@ -29,6 +29,11 @@ namespace Elementary.Compare
     {
     }
 
+    /// <summary>
+    /// Satrts the deinition how to create a flattened and comparable representation of a
+    /// given object instance.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public sealed class FlattenedObjectBuilder<T>
     {
         private List<HierarchyPath<string>> Excluded { get; } = new List<HierarchyPath<string>>();
@@ -75,6 +80,10 @@ namespace Elementary.Compare
             return this;
         }
 
+        /// <summary>
+        /// Finshes the defineitionof the comparison process.
+        /// </summary>
+        /// <returns></returns>
         public FlattenedObject Build() => new FlattenedObject(this.Traverse());
     }
 

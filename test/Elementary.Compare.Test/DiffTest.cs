@@ -117,6 +117,41 @@ namespace Elementary.Compare.Test
         }
 
         [Fact]
+        public void Diff_finds_additional_property_casing()
+        {
+            // ARRANGE
+
+            var obj1 = new
+            {
+                A = "a",
+            };
+
+            var obj2 = new
+            {
+                a = "a"
+            };
+
+            // ACT
+
+            var result1 = obj1.Diff(obj2);
+            var result2 = obj2.Diff(obj1);
+
+            // ASSERT
+            // instances are structurally different. One leaf is equal
+
+            Assert.False(result1.AreEqual);
+            Assert.False(result2.AreEqual);
+            Assert.Equal(2, result1.Missing.Count());
+            Assert.Equal("A", result1.Missing.Right.Single());
+            Assert.Equal("a", result1.Missing.Left.Single());
+            Assert.Equal(2, result2.Missing.Count());
+            Assert.Equal("A", result2.Missing.Left.Single());
+            Assert.Equal("a", result2.Missing.Right.Single());
+            Assert.Empty(result1.EqualValues);
+            Assert.Empty(result2.EqualValues);
+        }
+
+        [Fact]
         public void Diff_ignores_additional_property_if_excluded()
         {
             // ARRANGE
@@ -133,7 +168,7 @@ namespace Elementary.Compare.Test
             };
 
             // ACT
-            // exlcude prooerty 'b' from comparision
+            // exlcude property 'b' from comparision
 
             var result1 = obj1.Flatten().Exclude(o => o.b).Build().Diff(obj2);
             var result2 = obj2.Diff(obj1.Flatten().Exclude(o => o.b).Build());
