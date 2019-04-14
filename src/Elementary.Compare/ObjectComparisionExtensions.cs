@@ -10,6 +10,8 @@ namespace Elementary.Compare
 {
     public static class ObjectComparisionExtensions
     {
+        #region Diff
+
         /// <summary>
         /// Compares to instances arbitray reference types with each other and reports equal and different property values.
         /// </summary>
@@ -92,6 +94,10 @@ namespace Elementary.Compare
 
         private static Type GetTypeOfValueSafe(object value) => value?.GetType() ?? typeof(object);
 
+        #endregion Diff
+
+        #region NoPropertyHasDefaultValue
+
         /// <summary>
         /// Verifies if all properties of the given object have value != default(T). This is useful to
         /// check it test object is not completely filled with data.
@@ -124,5 +130,18 @@ namespace Elementary.Compare
             }
             return true;
         }
+
+        #endregion NoPropertyHasDefaultValue
+
+        #region Contains
+
+        public static bool Contains<TLeft,TRight>(this TLeft left, TRight right, out IEnumerable<string> missingRight)
+        {
+            var diffResult = DiffFlattendLeaves(left.Flatten().Build(), right.Flatten().Build(), new DiffResult());
+            missingRight = diffResult.Missing.Right;
+            return !(missingRight.Any());
+
+        }
+        #endregion 
     }
 }
